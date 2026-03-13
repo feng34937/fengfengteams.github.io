@@ -20,7 +20,7 @@
             overflow: hidden;
             touch-action: manipulation;
         }
-        /* 全屏页 - 添加淡入淡出动画 */
+        /* 全屏页 */
         .full-page {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -154,7 +154,7 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* 自定义国家弹窗 - 添加缩放动画 */
+        /* 自定义国家弹窗 */
         .name-modal {
             display: none; position: fixed; top:0; left:0; width:100%; height:100%;
             background: rgba(0,0,0,0.95); z-index: 25000; align-items: center; justify-content: center;
@@ -335,13 +335,14 @@
             to { opacity: 1; transform: translateX(0); }
         }
         .player-card.active { border-color: #ffd966; box-shadow: 0 0 15px #ffb347; background: #3d1515; transform: scale(1.02); }
+        .player-card.eliminated { opacity: 0.4; filter: grayscale(80%); } /* 被淘汰玩家样式 */
         .player-name { font-size: 22px; font-weight: bold; color: #ffd966; margin-bottom: 6px; }
         .capital-name { font-size: 18px; color: #ffb3b3; margin-bottom: 8px; font-style: italic; border-bottom: 1px dashed #8b1a1a; padding-bottom: 4px; }
         .resource-display { display: flex; flex-wrap: wrap; gap: 8px; background: #1f0606; padding: 8px; font-size: 15px; border-radius: 4px; }
         .resource-display div { transition: all 0.3s ease; }
         .resource-display div:hover { transform: scale(1.1); color: #ffd966; }
         .top-actions { display: flex; justify-content: space-between; align-items: stretch; margin-bottom: 15px; gap: 15px; }
-        .rules-btn, .loan-btn, .research-btn, .deploy-weapon-btn {
+        .rules-btn, .research-btn, .deploy-weapon-btn {
             font-size: 26px; cursor: pointer; color: #ffb3b3; padding: 15px 25px;
             background: #2d0a0a; border: 2px solid #8b1a1a; display: flex; align-items: center; font-weight: bold;
             flex: 1; justify-content: center; text-align: center;
@@ -350,13 +351,13 @@
             position: relative;
             overflow: hidden;
         }
-        .rules-btn:hover, .loan-btn:hover, .research-btn:hover, .deploy-weapon-btn:hover {
+        .rules-btn:hover, .research-btn:hover, .deploy-weapon-btn:hover {
             background: #3d1515;
             border-color: #ffb347;
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 5px 15px rgba(255,180,70,0.3);
         }
-        .rules-btn:active, .loan-btn:active, .research-btn:active, .deploy-weapon-btn:active {
+        .rules-btn:active, .research-btn:active, .deploy-weapon-btn:active {
             transform: translateY(0) scale(0.98);
         }
         /* 网格 20x20 */
@@ -424,6 +425,7 @@
         .action-btn { padding: 12px 24px; border: none; background: #8b1a1a; color: white; font-weight: bold; font-size: 20px; cursor: pointer; transition: all 0.2s ease; border-radius: 4px; }
         .action-btn:hover:not(:disabled) { background: #a52222; transform: scale(1.05); }
         .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .action-btn.used { opacity: 0.5; background: #4a0f0f; }
         .status-text { text-align: center; margin-top: 18px; color: #ffb3b3; font-size: 22px; font-weight: bold; min-height: 60px; transition: all 0.3s ease; }
         .data-info { margin-top: 20px; font-size: 18px; color: #ffb3b3; background: #1f0606; padding: 15px; border-radius: 4px; transition: all 0.3s ease; }
         .modal {
@@ -444,6 +446,7 @@
         }
         .buy-btn { background: #8b1a1a; color: white; border: none; padding: 8px 20px; font-size: 22px; cursor: pointer; margin: 5px; transition: all 0.2s ease; border-radius: 4px; }
         .buy-btn:hover { background: #a52222; transform: scale(1.05); }
+        .buy-btn.disabled { opacity: 0.3; pointer-events: none; }
         .close-btn { font-size: 36px; cursor: pointer; float: right; transition: all 0.2s ease; }
         .close-btn:hover { transform: rotate(90deg); color: #ffb347; }
         .loan-warning { color: #ffb347; font-size: 20px; }
@@ -453,7 +456,7 @@
         .disabled-tech { opacity: 0.5; pointer-events: none; background-color: #4a0f0f; }
         .tech-note { color: #ffb3b3; font-size: 18px; margin-left: 10px; }
 
-        /* 右下角缩放控制 - 添加悬浮动画 */
+        /* 右下角缩放控制 */
         .zoom-controls {
             position: fixed;
             bottom: 30px;
@@ -559,43 +562,18 @@
             <div class="rules-modal-title">📜 游戏规则</div>
             <ul class="rules-modal-list">
                 <li>1. 每位玩家初始4格连片陆地，并设立首都。</li>
-                <li>2. 每回合可 部署/移动/收集/扩张/攻击。扩张可至海上 (100银币)。</li>
-                <li>3. 联合国借款：借款，3回合后归还等额资源。若不足，每欠1单位扣除100银币。</li>
-                <li>4. 长按格子查看信息。胜利条件：最后存活/攻占所有首都。</li>
-                <li>5. 每个格子只能收集一次资源。</li>
-                <li>6. 海军(船/巡洋舰/航母)只能部署在海上，其他单位只能部署在陆地。</li>
-                <li>7. 导弹/核弹有爆炸范围：短程1格，中程2格，洲际3格，原子弹2格，氢弹3格。攻击时波及范围内所有单位与领土。</li>
+                <li>2. 每回合可 部署/移动/收集/扩张/攻击 (仅1次攻击)。扩张可至海上 (100银币)。</li>
+                <li>3. 长按格子查看信息。胜利条件：最后存活/攻占所有首都。</li>
+                <li>4. 每个格子只能收集一次资源。部分陆地格子有铀资源。</li>
+                <li>5. 海军(船/巡洋舰/航母)只能部署在海上，且永远不能登陆。</li>
+                <li>6. 导弹/核弹有爆炸范围：短程1格，中程2格，洲际3格，原子弹2格，氢弹3格。攻击时波及范围内所有单位与领土。</li>
+                <li>7. 研发的武器只能由研发者使用，且只能部署一次（消耗品）。</li>
+                <li>8. 首都首次被攻占时，该国家立即灭亡，其所有领土和单位消失。</li>
             </ul>
             <button class="close-rules-btn" id="closeRulesBtn">知道了</button>
         </div>
     </div>
-    <!-- 借款弹窗 (独立) -->
-    <div class="modal" id="loanModal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 style="font-size:32px;">💳 联合国借款</h2><span class="close-btn" id="closeLoanBtn">&times;</span></div>
-            <div class="loan-item">
-                <div><h3>银币</h3><p>借款100银币，3回合后归还</p></div>
-                <button class="buy-btn" data-loan="silver" data-amount="100">借款100</button>
-            </div>
-            <div class="loan-item">
-                <div><h3>金币</h3><p>借款2金币，3回合后归还</p></div>
-                <button class="buy-btn" data-loan="gold" data-amount="2">借款2</button>
-            </div>
-            <div class="loan-item">
-                <div><h3>钻石</h3><p>借款1钻石，3回合后归还</p></div>
-                <button class="buy-btn" data-loan="diamond" data-amount="1">借款1</button>
-            </div>
-            <div class="loan-item">
-                <div><h3>稀土</h3><p>借款10稀土，3回合后归还</p></div>
-                <button class="buy-btn" data-loan="rareEarth" data-amount="10">借款10</button>
-            </div>
-            <div class="loan-item">
-                <div><h3>石油</h3><p>借款20石油，3回合后归还</p></div>
-                <button class="buy-btn" data-loan="oil" data-amount="20">借款20</button>
-            </div>
-            <p class="loan-warning">⚠️ 每欠1单位扣100银币</p>
-        </div>
-    </div>
+
     <!-- 研发弹窗 (科技树) -->
     <div class="modal" id="researchModal">
         <div class="modal-content">
@@ -615,7 +593,7 @@
                 </div>
                 <!-- 海军单位 -->
                 <div class="tech-category">
-                    <h3>⚓ 海军单位 (部署于海洋)</h3>
+                    <h3>⚓ 海军单位 (部署于海洋，永不上陆)</h3>
                     <div class="loan-item">
                         <div><span>运输船</span><span class="tech-note">(运输单位)</span></div>
                         <button class="buy-btn research-buy" data-tech="ship" data-cost-silver="150" data-cost-oil="10">研发 (150银,10石油)</button>
@@ -668,7 +646,7 @@
     <!-- 部署武器专用弹窗 -->
     <div class="deploy-modal" id="deployModal">
         <div class="deploy-content">
-            <div class="deploy-title">🔧 部署武器</div>
+            <div class="deploy-title">🔧 部署武器 (每个武器只能使用一次)</div>
             <div id="deployWeaponList"></div>
             <button class="close-deploy-btn" id="closeDeployBtn">取 消</button>
         </div>
@@ -710,7 +688,6 @@
             <div class="players-stack" id="playersStack"></div>
             <div class="top-actions">
                 <div class="rules-btn" id="rulesBtn">📜 规 则</div>
-                <div class="loan-btn" id="loanBtn">💳 借 款</div>
                 <div class="research-btn" id="researchBtn">🔬 研 发</div>
                 <div class="deploy-weapon-btn" id="deployWeaponBtn">⚙️ 部署武器</div>
             </div>
@@ -726,7 +703,7 @@
                 <button class="action-btn" id="endTurnBtn" disabled>结束回合</button>
             </div>
             <div class="status-text" id="statusText">请先完成大厅设置</div>
-            <div class="data-info">⚔️ 长按格子查看 | 20x20 | 扩张可至海上 | 海军只能部署海上 | 导弹/核弹有范围</div>
+            <div class="data-info">⚔️ 长按格子查看 | 首都陷落即灭国 | 每回合1次攻击 | 武器消耗品 | 船永不上陆 | 铀资源</div>
         </div>
     </div>
 
@@ -739,7 +716,7 @@
 
     <script>
         (function() {
-            // 游戏核心状态 - 已移除GDP
+            // 游戏核心状态
             const gameState = {
                 playerResources: {},
                 playerNames: {},        // 自定义国名
@@ -758,23 +735,28 @@
                 selectedAction: null,
                 units: new Map(),        // 存储单位 {type, owner}
                 gameMode: null,
-                loans: [],
                 globalTurnCounter: 0,
                 harvestedCells: new Set(), // 记录已收集资源的格子
-                // 研发完成的技术
+                eliminatedPlayers: new Set(), // 被淘汰的玩家
+                // 研发完成的技术 - 记录每个玩家研发的武器
                 researched: {
-                    tank: false,
-                    '30w': false,
-                    ship: false,
-                    cruiser: false,
-                    carrier: false,
-                    missileShort: false,
-                    missileMedium: false,
-                    missileLong: false,
-                    nukeInfra: false,
-                    nuke: false,
-                    hbomb: false
+                    // 每个武器类型记录哪些玩家研发了 (用Set存储玩家ID)
+                    tank: new Set(),
+                    '30w': new Set(),
+                    ship: new Set(),
+                    cruiser: new Set(),
+                    carrier: new Set(),
+                    missileShort: new Set(),
+                    missileMedium: new Set(),
+                    missileLong: new Set(),
+                    nukeInfra: new Set(),
+                    nuke: new Set(),
+                    hbomb: new Set()
                 },
+                // 武器使用次数记录 (每个玩家每种武器只能使用一次)
+                weaponUsed: new Map(), // key: "player_weaponType" 例如 "1_tank"
+                // 当前回合是否已经攻击过
+                attackUsedThisTurn: false,
                 // 待部署的武器类型
                 pendingWeapon: null
             };
@@ -852,9 +834,6 @@
             const rulesModal = document.getElementById('rulesModal');
             const rulesBtn = document.getElementById('rulesBtn');
             const closeRulesBtn = document.getElementById('closeRulesBtn');
-            const loanModal = document.getElementById('loanModal');
-            const loanBtn = document.getElementById('loanBtn');
-            const closeLoanBtn = document.getElementById('closeLoanBtn');
             const researchModal = document.getElementById('researchModal');
             const researchBtn = document.getElementById('researchBtn');
             const closeResearchBtn = document.getElementById('closeResearchBtn');
@@ -887,10 +866,6 @@
             rulesBtn.addEventListener('click', () => { rulesModal.style.display = 'flex'; });
             closeRulesBtn.addEventListener('click', () => { rulesModal.style.display = 'none'; });
             window.addEventListener('click', (e) => { if(e.target === rulesModal) rulesModal.style.display = 'none'; });
-
-            loanBtn.addEventListener('click', () => { if(!gameState.setupPhase.isSetting) loanModal.style.display = 'flex'; });
-            closeLoanBtn.addEventListener('click', () => loanModal.style.display = 'none');
-            window.addEventListener('click', (e) => { if(e.target === loanModal) loanModal.style.display = 'none'; });
 
             researchBtn.addEventListener('click', () => { if(!gameState.setupPhase.isSetting) researchModal.style.display = 'flex'; });
             closeResearchBtn.addEventListener('click', () => researchModal.style.display = 'none');
@@ -980,6 +955,13 @@
                 });
                 gameState.harvestedCells.clear();
                 gameState.units.clear();
+                gameState.weaponUsed.clear();
+                gameState.attackUsedThisTurn = false;
+                gameState.eliminatedPlayers.clear();
+                // 重置研发记录
+                for(let key in gameState.researched) {
+                    gameState.researched[key] = new Set();
+                }
                 generateGrid();
                 updateNotification();
                 updateTurnIndicator();
@@ -997,11 +979,15 @@
                     if(!gameState.capitalNames[i]) gameState.capitalNames[i] = `首都${i}`;
                 }
                 gameState.units.clear();
-                gameState.loans = [];
                 gameState.globalTurnCounter = 0;
                 gameState.harvestedCells.clear();
+                gameState.weaponUsed.clear();
+                gameState.attackUsedThisTurn = false;
+                gameState.eliminatedPlayers.clear();
+                for(let key in gameState.researched) {
+                    gameState.researched[key] = new Set();
+                }
                 for(let i=1; i<=count; i++) {
-                    // 已移除GDP
                     gameState.playerResources[i] = { silver:100, gold:2, diamond:1, rareEarth:0, oil:0, uranium:0 };
                     gameState.playerLands[i] = { cells: new Set(), capital: null };
                 }
@@ -1016,6 +1002,9 @@
                     const card = document.createElement('div');
                     const isActive = gameState.setupPhase.isSetting ? i === gameState.setupPhase.currentSettingPlayer : i === gameState.currentTurn;
                     card.className = `player-card ${isActive?'active':''}`;
+                    if(gameState.eliminatedPlayers.has(i)) {
+                        card.classList.add('eliminated');
+                    }
                     card.innerHTML = `
                         <div class="player-name">🏳️ ${gameState.playerNames[i]}</div>
                         <div class="capital-name">🏛️ ${gameState.capitalNames[i]}</div>
@@ -1037,7 +1026,7 @@
                     if(idx+1 > gameState.totalPlayers) return;
                     const r = gameState.playerResources[idx+1];
                     const items = card.querySelectorAll('.resource-display > div');
-                    if(items.length >=6) {  // 调整为6项
+                    if(items.length >=6) {
                         items[0].textContent = `💰 ${r.silver}`;
                         items[1].textContent = `🏆 ${r.gold}`;
                         items[2].textContent = `💎 ${r.diamond}`;
@@ -1048,19 +1037,110 @@
                 });
             }
 
+            // 检查游戏是否应该结束
+            function checkGameOver() {
+                const activePlayers = [];
+                for(let i=1; i<=gameState.totalPlayers; i++) {
+                    if(!gameState.eliminatedPlayers.has(i)) {
+                        activePlayers.push(i);
+                    }
+                }
+                if(activePlayers.length <= 1) {
+                    if(activePlayers.length === 1) {
+                        statusText.textContent = `🏆 游戏结束！胜利者是：${gameState.playerNames[activePlayers[0]]}`;
+                    } else {
+                        statusText.textContent = `🏆 游戏结束！没有幸存者。`;
+                    }
+                    // 禁用所有操作
+                    placeUnitBtn.disabled = true;
+                    moveUnitBtn.disabled = true;
+                    collectBtn.disabled = true;
+                    expandLandBtn.disabled = true;
+                    attackBtn.disabled = true;
+                    endTurnBtn.disabled = true;
+                    researchBtn.style.pointerEvents = 'none';
+                    deployWeaponBtn.style.pointerEvents = 'none';
+                    return true;
+                }
+                return false;
+            }
+
+            // 淘汰玩家，清除其所有领土和单位
+            function eliminatePlayer(playerId) {
+                if(gameState.eliminatedPlayers.has(playerId)) return;
+                
+                gameState.eliminatedPlayers.add(playerId);
+                
+                // 清除该玩家的所有领土标记
+                const cellsToRemove = [];
+                for(let cell of gameState.playerLands[playerId].cells) {
+                    cellsToRemove.push(cell);
+                }
+                cellsToRemove.forEach(key => {
+                    const [x,y] = key.split(',').map(Number);
+                    const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                    if(cell) {
+                        cell.classList.remove(`player${playerId}-land`, `player${playerId}-capital`);
+                    }
+                    gameState.playerLands[playerId].cells.delete(key);
+                });
+                
+                // 清除该玩家的所有单位
+                const unitsToRemove = [];
+                for(let [key, unit] of gameState.units.entries()) {
+                    if(unit.owner === playerId) {
+                        unitsToRemove.push(key);
+                    }
+                }
+                unitsToRemove.forEach(key => {
+                    const [x,y] = key.split(',').map(Number);
+                    const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
+                    if(cell) {
+                        cell.classList.remove('unit');
+                    }
+                    gameState.units.delete(key);
+                });
+                
+                // 清除首都标记
+                gameState.playerLands[playerId].capital = null;
+                
+                // 重置该玩家的资源（可选）
+                gameState.playerResources[playerId] = { silver:0, gold:0, diamond:0, rareEarth:0, oil:0, uranium:0 };
+                
+                renderPlayerCards();
+                statusText.textContent = `💀 ${gameState.playerNames[playerId]} 已灭亡！`;
+                
+                // 检查游戏是否结束
+                checkGameOver();
+            }
+
             function updateTurnIndicator() {
                 if(gameState.setupPhase.isSetting) {
                     turnIndicator.textContent = `🔄 国土设置阶段 - ${gameState.playerNames[gameState.setupPhase.currentSettingPlayer]} 请设置国土`;
                     placeUnitBtn.disabled = true; moveUnitBtn.disabled = true; collectBtn.disabled = true; expandLandBtn.disabled = true; attackBtn.disabled = true; endTurnBtn.disabled = true;
-                    loanBtn.style.pointerEvents = 'none'; loanBtn.style.opacity = '0.5';
                     researchBtn.style.pointerEvents = 'none'; researchBtn.style.opacity = '0.5';
                     deployWeaponBtn.style.pointerEvents = 'none'; deployWeaponBtn.style.opacity = '0.5';
                 } else {
+                    // 检查当前玩家是否已被淘汰
+                    if(gameState.eliminatedPlayers.has(gameState.currentTurn)) {
+                        // 自动跳过该玩家
+                        endTurn();
+                        return;
+                    }
+                    
                     turnIndicator.textContent = `🔄 当前回合：${gameState.playerNames[gameState.currentTurn]}`;
-                    placeUnitBtn.disabled = false; moveUnitBtn.disabled = false; collectBtn.disabled = false; expandLandBtn.disabled = false; attackBtn.disabled = false; endTurnBtn.disabled = false;
-                    loanBtn.style.pointerEvents = 'auto'; loanBtn.style.opacity = '1';
+                    placeUnitBtn.disabled = false; moveUnitBtn.disabled = false; collectBtn.disabled = false; expandLandBtn.disabled = false; 
+                    attackBtn.disabled = gameState.attackUsedThisTurn; // 攻击按钮状态
+                    endTurnBtn.disabled = false;
                     researchBtn.style.pointerEvents = 'auto'; researchBtn.style.opacity = '1';
                     deployWeaponBtn.style.pointerEvents = 'auto'; deployWeaponBtn.style.opacity = '1';
+                    
+                    // 攻击按钮样式
+                    if(gameState.attackUsedThisTurn) {
+                        attackBtn.classList.add('used');
+                    } else {
+                        attackBtn.classList.remove('used');
+                    }
                 }
             }
 
@@ -1079,25 +1159,50 @@
                 }
             }
 
+            // 生成地图，部分陆地有铀
             function generateBalancedMap() {
                 const size = 20; const total = size*size; const target = Math.floor(total/2);
                 let map = Array(size).fill().map(()=>Array(size).fill(0));
+                // 随机生成陆地海洋
                 for(let y=0; y<size; y++) for(let x=0; x<size; x++) map[y][x] = Math.random()>0.5?1:0;
                 let land = map.flat().filter(v=>v===1).length;
                 while(land > target) { for(let y=0; y<size && land>target; y++) for(let x=0; x<size && land>target; x++) if(map[y][x]===1) { map[y][x]=0; land--; } }
                 while(land < target) { for(let y=0; y<size && land<target; y++) for(let x=0; x<size && land<target; x++) if(map[y][x]===0) { map[y][x]=1; land++; } }
-                return map;
+                
+                // 在陆地上随机放置铀资源 (约10%的陆地格子有铀)
+                const uraniumMap = new Set();
+                const landCells = [];
+                for(let y=0; y<size; y++) {
+                    for(let x=0; x<size; x++) {
+                        if(map[y][x]===1) landCells.push({x,y});
+                    }
+                }
+                const uraniumCount = Math.floor(landCells.length * 0.1);
+                for(let i=0; i<uraniumCount; i++) {
+                    if(landCells.length === 0) break;
+                    const idx = Math.floor(Math.random() * landCells.length);
+                    const cell = landCells[idx];
+                    uraniumMap.add(`${cell.x},${cell.y}`);
+                    landCells.splice(idx, 1);
+                }
+                
+                return {map, uraniumMap};
             }
 
             function generateGrid() {
                 grid.innerHTML = '';
-                const map = generateBalancedMap();
+                const {map, uraniumMap} = generateBalancedMap();
+                // 存储铀资源位置供收集使用
+                window.uraniumResources = uraniumMap;
+                
                 for(let y=0; y<20; y++) {
                     for(let x=0; x<20; x++) {
                         const cell = document.createElement('div');
                         cell.classList.add('grid-cell');
                         cell.dataset.x = x; cell.dataset.y = y;
                         if(map[y][x]===1) cell.classList.add('land'); else cell.classList.add('sea');
+                        
+                        // 标记铀资源（视觉上可以加个标记，但为了简洁先不加）
                         
                         let longPressTimer = null;
                         let longPressTriggered = false;
@@ -1125,10 +1230,15 @@
                 cellInfoCoords.textContent = `(${x},${y})`;
                 cellInfoTerrain.textContent = cell.classList.contains('land')? '陆地' : '海洋';
                 let owner = 0;
-                for(let i=1; i<=gameState.totalPlayers; i++) if(gameState.playerLands[i] && gameState.playerLands[i].cells.has(key)) { owner=i; break; }
+                for(let i=1; i<=gameState.totalPlayers; i++) {
+                    if(!gameState.eliminatedPlayers.has(i) && gameState.playerLands[i] && gameState.playerLands[i].cells.has(key)) { 
+                        owner=i; break; 
+                    }
+                }
                 cellInfoCountry.textContent = owner? gameState.playerNames[owner] : '无主之地';
                 let isCapital = false, capOwner = 0;
                 for(let i=1; i<=gameState.totalPlayers; i++) {
+                    if(gameState.eliminatedPlayers.has(i)) continue;
                     if(gameState.playerLands[i] && gameState.playerLands[i].capital) {
                         const cap = gameState.playerLands[i].capital;
                         if(cap && cap.x===x && cap.y===y) { isCapital=true; capOwner=i; break; }
@@ -1156,6 +1266,10 @@
                 }
                 cellInfoWeapon.textContent = weapon;
                 cellInfoHarvested.textContent = gameState.harvestedCells.has(key) ? '已耗尽 ❌' : '可收集 ✅';
+                // 显示是否有铀
+                if(window.uraniumResources && window.uraniumResources.has(key) && !gameState.harvestedCells.has(key)) {
+                    cellInfoHarvested.textContent += ' (含铀)';
+                }
                 cellInfoModal.style.display = 'flex';
             }
 
@@ -1177,7 +1291,9 @@
 
             function isCellOccupiedByAnyPlayer(x,y) {
                 const key = `${x},${y}`;
-                for(let i=1;i<=gameState.totalPlayers;i++) if(gameState.playerLands[i] && gameState.playerLands[i].cells.has(key)) return i;
+                for(let i=1;i<=gameState.totalPlayers;i++) {
+                    if(!gameState.eliminatedPlayers.has(i) && gameState.playerLands[i] && gameState.playerLands[i].cells.has(key)) return i;
+                }
                 return 0;
             }
 
@@ -1264,6 +1380,13 @@
             function handleCellClick(e, x, y, cell) {
                 if(e.ctrlKey || e.button===2) { showCellInfo(x,y); return; }
                 if(gameState.setupPhase.isSetting) { handleSetupCellClick(x,y,cell); return; }
+                
+                // 如果当前玩家已被淘汰，不允许操作
+                if(gameState.eliminatedPlayers.has(gameState.currentTurn)) {
+                    statusText.textContent = `❌ 你已被淘汰，无法操作`;
+                    return;
+                }
+                
                 if(gameState.selectedCell) {
                     const prev = document.querySelector(`[data-x="${gameState.selectedCell.x}"][data-y="${gameState.selectedCell.y}"]`);
                     if(prev) prev.classList.remove('selected');
@@ -1286,8 +1409,10 @@
                 }
             }
 
-            function isMyLand(x,y) { return gameState.playerLands[gameState.currentTurn].cells.has(`${x},${y}`); }
-            function isMySea(x,y) { return gameState.playerLands[gameState.currentTurn].cells.has(`${x},${y}`); } // 海洋也属于领土
+            function isMyLand(x,y) { 
+                if(gameState.eliminatedPlayers.has(gameState.currentTurn)) return false;
+                return gameState.playerLands[gameState.currentTurn].cells.has(`${x},${y}`); 
+            }
 
             function placeUnit(x,y) {
                 if(!isMyLand(x,y)) { statusText.textContent = `❌ 只能在自己的领土上部署步兵！`; return; }
@@ -1343,27 +1468,45 @@
                 let silver = Math.floor(Math.random()*30)+10;
                 let rare = Math.floor(Math.random()*8)+2;
                 let oil = Math.floor(Math.random()*10)+2;
+                let uranium = 0;
+                
+                // 如果有铀资源，额外获得铀
+                if(window.uraniumResources && window.uraniumResources.has(key)) {
+                    uranium = Math.floor(Math.random()*2)+1; // 1-2铀
+                }
+                
                 if(gameState.units.has(key) && gameState.units.get(key).owner===gameState.currentTurn) {
                     silver*=2; rare*=2; oil*=2;
+                    if(uranium > 0) uranium *= 2;
                 }
+                
                 gameState.playerResources[gameState.currentTurn].silver += silver;
                 gameState.playerResources[gameState.currentTurn].rareEarth += rare;
                 gameState.playerResources[gameState.currentTurn].oil += oil;
-                // 已移除GDP
+                gameState.playerResources[gameState.currentTurn].uranium += uranium;
                 
                 gameState.harvestedCells.add(key);
                 
                 updateResourceDisplay();
-                statusText.textContent = `收集到 ${silver}银 ${rare}稀土 ${oil}石油 (该格子资源已耗尽)`;
+                statusText.textContent = `收集到 ${silver}银 ${rare}稀土 ${oil}石油${uranium>0 ? ' '+uranium+'铀' : ''} (该格子资源已耗尽)`;
                 gameState.selectedAction = null;
                 collectBtn.classList.remove('active-action');
             }
 
             function expandLand(x,y) {
+                if(!isMyLand(x,y) && !gameState.playerLands[gameState.currentTurn].cells.has(`${x},${y}`)) { 
+                    // 扩张时目标不是自己的领土，可以
+                } else {
+                    statusText.textContent = `❌ 不能扩张到已有领土`; return;
+                }
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
                 // 扩张可以是陆地或海洋
                 const key=`${x},${y}`;
-                for(let i=1;i<=gameState.totalPlayers;i++) if(gameState.playerLands[i].cells.has(key)) { statusText.textContent='❌ 该格子已被其他玩家占领'; return; }
+                for(let i=1;i<=gameState.totalPlayers;i++) {
+                    if(!gameState.eliminatedPlayers.has(i) && gameState.playerLands[i].cells.has(key)) { 
+                        statusText.textContent='❌ 该格子已被其他玩家占领'; return; 
+                    }
+                }
                 const curLands = gameState.playerLands[gameState.currentTurn].cells;
                 const neighbors = [`${x-1},${y}`,`${x+1},${y}`,`${x},${y-1}`,`${x},${y+1}`];
                 if(!neighbors.some(n=>curLands.has(n))) { statusText.textContent='❌ 只能扩张到相邻格子'; return; }
@@ -1394,10 +1537,17 @@
             }
 
             function attackCell(x,y) {
+                // 检查是否已攻击过
+                if(gameState.attackUsedThisTurn) {
+                    statusText.textContent = `❌ 本回合已经攻击过了，请等待下一回合`;
+                    gameState.selectedAction = null;
+                    attackBtn.classList.remove('active-action');
+                    return;
+                }
+                
                 const targetKey = `${x},${y}`;
                 if(isMyLand(x,y)) { statusText.textContent = `❌ 不能攻击自己的领土`; return; }
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                // 攻击目标可以是任何地形
 
                 let attackerUnitKey = null;
                 for(let [k,u] of gameState.units) {
@@ -1410,6 +1560,9 @@
                 
                 // 检查是否为范围武器
                 const range = weaponRange[attackerType];
+                let capitalLost = false;
+                let eliminatedPlayer = null;
+                
                 if(range !== undefined) {
                     // 范围攻击：获取范围内的所有格子
                     const [ax, ay] = attackerUnitKey.split(',').map(Number);
@@ -1438,14 +1591,18 @@
                         if(!gameState.playerLands[gameState.currentTurn].cells.has(posKey)) {
                             // 找到原拥有者并移除
                             for(let i=1; i<=gameState.totalPlayers; i++) {
+                                if(gameState.eliminatedPlayers.has(i)) continue;
                                 if(i !== gameState.currentTurn && gameState.playerLands[i].cells.has(posKey)) {
-                                    gameState.playerLands[i].cells.delete(posKey);
-                                    targetCell.classList.remove(`player${i}-land`, `player${i}-capital`);
+                                    // 检查是否是首都
                                     if(gameState.playerLands[i].capital && 
                                        gameState.playerLands[i].capital.x === pos.x && 
                                        gameState.playerLands[i].capital.y === pos.y) {
-                                        gameState.playerLands[i].capital = null;
+                                        capitalLost = true;
+                                        eliminatedPlayer = i;
                                     }
+                                    
+                                    gameState.playerLands[i].cells.delete(posKey);
+                                    targetCell.classList.remove(`player${i}-land`, `player${i}-capital`);
                                     break;
                                 }
                             }
@@ -1459,7 +1616,7 @@
                     statusText.textContent = `范围攻击！消灭 ${destroyedCount} 个单位，占领 ${capturedCount} 个格子`;
                     
                 } else {
-                    // 原单格攻击逻辑 (保留)
+                    // 原单格攻击逻辑
                     const defenderUnit = gameState.units.get(targetKey);
                     if(defenderUnit) {
                         if(defenderUnit.owner === gameState.currentTurn) { statusText.textContent = `❌ 不能攻击自己的单位`; return; }
@@ -1475,16 +1632,20 @@
                     } else {
                         let oldOwner = null;
                         for(let i=1; i<=gameState.totalPlayers; i++) {
+                            if(gameState.eliminatedPlayers.has(i)) continue;
                             if(gameState.playerLands[i].cells.has(targetKey)) { oldOwner = i; break; }
                         }
                         if(oldOwner) {
-                            gameState.playerLands[oldOwner].cells.delete(targetKey);
-                            cell.classList.remove(`player${oldOwner}-land`, `player${oldOwner}-capital`);
+                            // 检查是否是首都
                             if(gameState.playerLands[oldOwner].capital && 
                                gameState.playerLands[oldOwner].capital.x === x && 
                                gameState.playerLands[oldOwner].capital.y === y) {
-                                gameState.playerLands[oldOwner].capital = null;
+                                capitalLost = true;
+                                eliminatedPlayer = oldOwner;
                             }
+                            
+                            gameState.playerLands[oldOwner].cells.delete(targetKey);
+                            cell.classList.remove(`player${oldOwner}-land`, `player${oldOwner}-capital`);
                         }
                         gameState.playerLands[gameState.currentTurn].cells.add(targetKey);
                         cell.classList.add(`player${gameState.currentTurn}-land`);
@@ -1500,8 +1661,17 @@
                     }
                 }
                 
+                // 标记本回合已攻击
+                gameState.attackUsedThisTurn = true;
                 gameState.selectedAction = null;
                 attackBtn.classList.remove('active-action');
+                
+                // 处理首都陷落
+                if(capitalLost && eliminatedPlayer !== null && !gameState.eliminatedPlayers.has(eliminatedPlayer)) {
+                    eliminatePlayer(eliminatedPlayer);
+                }
+                
+                updateTurnIndicator(); // 更新攻击按钮状态
             }
 
             function deployWeaponToCell(x, y) {
@@ -1518,8 +1688,19 @@
                 }
                 
                 const weaponType = gameState.pendingWeapon;
-                if(!gameState.researched[weaponType]) {
+                const player = gameState.currentTurn;
+                
+                // 检查该玩家是否研发了这种武器
+                if(!gameState.researched[weaponType] || !gameState.researched[weaponType].has(player)) {
                     statusText.textContent = `❌ 你还没有研发这种武器`;
+                    gameState.pendingWeapon = null;
+                    return;
+                }
+                
+                // 检查是否已经使用过该武器 (每个玩家每种武器只能部署一次)
+                const usageKey = `${player}_${weaponType}`;
+                if(gameState.weaponUsed.has(usageKey)) {
+                    statusText.textContent = `❌ 这种武器你已经使用过了，每个武器只能部署一次`;
                     gameState.pendingWeapon = null;
                     return;
                 }
@@ -1538,7 +1719,9 @@
                     return;
                 }
                 
-                gameState.units.set(key, {type: weaponType, owner: gameState.currentTurn});
+                // 部署武器
+                gameState.units.set(key, {type: weaponType, owner: player});
+                gameState.weaponUsed.set(usageKey, true); // 标记已使用
                 cell.classList.add('unit');
                 
                 const weaponNames = {
@@ -1547,7 +1730,7 @@
                     'missileShort': '短程导弹', 'missileMedium': '中程导弹', 'missileLong': '洲际导弹',
                     'nuke': '原子弹', 'hbomb': '氢弹'
                 };
-                statusText.textContent = `部署 ${weaponNames[weaponType] || weaponType} 到 (${x}, ${y})`;
+                statusText.textContent = `部署 ${weaponNames[weaponType] || weaponType} 到 (${x}, ${y}) (已使用)`;
                 gameState.pendingWeapon = null;
                 deployModal.style.display = 'none';
             }
@@ -1555,20 +1738,37 @@
             function openDeployModal() {
                 if(gameState.setupPhase.isSetting) return;
                 const player = gameState.currentTurn;
+                if(gameState.eliminatedPlayers.has(player)) {
+                    alert('你已被淘汰，无法部署武器');
+                    return;
+                }
                 const weaponList = [];
-                if(gameState.researched.tank) weaponList.push({type: 'tank', name: '坦克 (陆地)'});
-                if(gameState.researched['30w']) weaponList.push({type: '30w', name: '30万士兵 (陆地)'});
-                if(gameState.researched.ship) weaponList.push({type: 'ship', name: '运输船 (海洋)'});
-                if(gameState.researched.cruiser) weaponList.push({type: 'cruiser', name: '巡洋舰 (海洋)'});
-                if(gameState.researched.carrier) weaponList.push({type: 'carrier', name: '航空母舰 (海洋)'});
-                if(gameState.researched.missileShort) weaponList.push({type: 'missileShort', name: '短程导弹 (范围1)'});
-                if(gameState.researched.missileMedium) weaponList.push({type: 'missileMedium', name: '中程导弹 (范围2)'});
-                if(gameState.researched.missileLong) weaponList.push({type: 'missileLong', name: '洲际导弹 (范围3)'});
-                if(gameState.researched.nuke) weaponList.push({type: 'nuke', name: '原子弹 (范围2)'});
-                if(gameState.researched.hbomb) weaponList.push({type: 'hbomb', name: '氢弹 (范围3)'});
+                
+                // 检查每个武器类型，只显示玩家已研发且未使用的
+                const weaponTypes = [
+                    {type: 'tank', name: '坦克 (陆地)'},
+                    {type: '30w', name: '30万士兵 (陆地)'},
+                    {type: 'ship', name: '运输船 (海洋)'},
+                    {type: 'cruiser', name: '巡洋舰 (海洋)'},
+                    {type: 'carrier', name: '航空母舰 (海洋)'},
+                    {type: 'missileShort', name: '短程导弹 (范围1)'},
+                    {type: 'missileMedium', name: '中程导弹 (范围2)'},
+                    {type: 'missileLong', name: '洲际导弹 (范围3)'},
+                    {type: 'nuke', name: '原子弹 (范围2)'},
+                    {type: 'hbomb', name: '氢弹 (范围3)'}
+                ];
+                
+                weaponTypes.forEach(w => {
+                    if(gameState.researched[w.type] && gameState.researched[w.type].has(player)) {
+                        const usageKey = `${player}_${w.type}`;
+                        if(!gameState.weaponUsed.has(usageKey)) {
+                            weaponList.push({type: w.type, name: w.name});
+                        }
+                    }
+                });
                 
                 if(weaponList.length === 0) {
-                    alert('你还没有研发任何武器，请先进行研发。');
+                    alert('你没有可用的武器。请先研发新武器，或已部署的武器不能重复使用。');
                     return;
                 }
                 
@@ -1597,30 +1797,21 @@
 
             deployWeaponBtn.addEventListener('click', openDeployModal);
 
-            function processLoansDue() {
-                const due = gameState.loans.filter(l=>l.dueGlobal === gameState.globalTurnCounter);
-                for(let loan of due) {
-                    const {player,type,amount} = loan;
-                    if(gameState.playerResources[player][type] >= amount) {
-                        gameState.playerResources[player][type] -= amount;
-                    } else {
-                        let shortage = amount - (gameState.playerResources[player][type] || 0);
-                        gameState.playerResources[player][type] = 0;
-                        gameState.playerResources[player].silver = Math.max(0, gameState.playerResources[player].silver - shortage*100);
-                    }
-                }
-                gameState.loans = gameState.loans.filter(l=>l.dueGlobal !== gameState.globalTurnCounter);
-                updateResourceDisplay();
-            }
-
             function endTurn() {
                 if(gameState.setupPhase.isSetting) return;
+                
+                // 跳过已淘汰的玩家
+                let nextPlayer = gameState.currentTurn % gameState.totalPlayers + 1;
+                while(gameState.eliminatedPlayers.has(nextPlayer) && nextPlayer !== gameState.currentTurn) {
+                    nextPlayer = nextPlayer % gameState.totalPlayers + 1;
+                }
+                
                 gameState.globalTurnCounter++;
-                processLoansDue();
-                gameState.currentTurn = gameState.currentTurn % gameState.totalPlayers + 1;
+                gameState.currentTurn = nextPlayer;
                 gameState.selectedCell = null; 
                 gameState.selectedAction = null;
                 gameState.pendingWeapon = null;
+                gameState.attackUsedThisTurn = false; // 重置攻击次数
                 document.querySelectorAll('.grid-cell').forEach(c=>c.classList.remove('selected'));
                 placeUnitBtn.classList.remove('active-action');
                 moveUnitBtn.classList.remove('active-action');
@@ -1630,31 +1821,26 @@
                 updateTurnIndicator();
                 renderPlayerCards();
                 statusText.textContent = `轮到 ${gameState.playerNames[gameState.currentTurn]}`;
+                
+                // 检查游戏是否结束
+                checkGameOver();
             }
 
-            document.querySelectorAll('[data-loan]').forEach(btn => {
-                btn.addEventListener('click', ()=>{
-                    if(gameState.setupPhase.isSetting) return;
-                    const player = gameState.currentTurn;
-                    const type = btn.dataset.loan;
-                    const amount = parseInt(btn.dataset.amount);
-                    gameState.playerResources[player][type] += amount;
-                    gameState.loans.push({player, type, amount, dueGlobal: gameState.globalTurnCounter+3});
-                    updateResourceDisplay();
-                    loanModal.style.display='none';
-                });
-            });
-
+            // 研发按钮
             document.querySelectorAll('.research-buy').forEach(btn => {
                 btn.addEventListener('click', function() {
                     if(gameState.setupPhase.isSetting) return;
                     const player = gameState.currentTurn;
+                    if(gameState.eliminatedPlayers.has(player)) {
+                        alert('你已被淘汰，无法研发');
+                        return;
+                    }
                     const tech = this.dataset.tech;
                     
-                    if (tech === 'missileMedium' && !gameState.researched.missileShort) { alert('需要先研发短程导弹'); return; }
-                    if (tech === 'missileLong' && !gameState.researched.missileMedium) { alert('需要先研发中程导弹'); return; }
-                    if (tech === 'nuke' && !gameState.researched.nukeInfra) { alert('需要先研发核基础设施'); return; }
-                    if (tech === 'hbomb' && !gameState.researched.nuke) { alert('需要先研发原子弹'); return; }
+                    if (tech === 'missileMedium' && !gameState.researched.missileShort.has(player)) { alert('需要先研发短程导弹'); return; }
+                    if (tech === 'missileLong' && !gameState.researched.missileMedium.has(player)) { alert('需要先研发中程导弹'); return; }
+                    if (tech === 'nuke' && !gameState.researched.nukeInfra.has(player)) { alert('需要先研发核基础设施'); return; }
+                    if (tech === 'hbomb' && !gameState.researched.nuke.has(player)) { alert('需要先研发原子弹'); return; }
                     
                     let costSilver = parseInt(this.dataset.costSilver) || 0;
                     let costGold = parseInt(this.dataset.costGold) || 0;
@@ -1680,13 +1866,17 @@
                     gameState.playerResources[player].diamond -= costDiamond;
                     gameState.playerResources[player].uranium = (gameState.playerResources[player].uranium || 0) - costUranium;
 
-                    gameState.researched[tech] = true;
+                    // 记录该玩家研发了此技术
+                    if(!gameState.researched[tech]) gameState.researched[tech] = new Set();
+                    gameState.researched[tech].add(player);
+                    
                     updateResourceDisplay();
                     alert('研发成功！');
                     researchModal.style.display = 'none';
                 });
             });
 
+            // 其他事件绑定
             confirmTerrainBtn.addEventListener('click', confirmSetup);
             endTurnBtn.addEventListener('click', endTurn);
             decreasePlayerBtn.addEventListener('click', ()=>{
@@ -1703,8 +1893,22 @@
             moveUnitBtn.addEventListener('click', ()=>{ if(!gameState.setupPhase.isSetting) { gameState.selectedAction='move'; statusText.textContent = `${gameState.playerNames[gameState.currentTurn]}：请点击你的领土格子移动单位`; } });
             collectBtn.addEventListener('click', ()=>{ if(!gameState.setupPhase.isSetting) { gameState.selectedAction='collect'; statusText.textContent = `${gameState.playerNames[gameState.currentTurn]}：请点击你的领土格子收集资源 (每个格子仅一次)`; } });
             expandLandBtn.addEventListener('click', ()=>{ if(!gameState.setupPhase.isSetting) { gameState.selectedAction='expand'; statusText.textContent = `${gameState.playerNames[gameState.currentTurn]}：请点击相邻的陆地或海洋格子扩张 (100银币)`; } });
-            attackBtn.addEventListener('click', ()=>{ if(!gameState.setupPhase.isSetting) { gameState.selectedAction='attack'; statusText.textContent = `${gameState.playerNames[gameState.currentTurn]}：请点击敌方格子攻击 (范围武器将波及周围)`; } });
+            attackBtn.addEventListener('click', ()=>{ 
+                if(!gameState.setupPhase.isSetting) { 
+                    if(gameState.eliminatedPlayers.has(gameState.currentTurn)) {
+                        statusText.textContent = `❌ 你已被淘汰`;
+                        return;
+                    }
+                    if(gameState.attackUsedThisTurn) {
+                        statusText.textContent = `❌ 本回合已经攻击过了`;
+                        return;
+                    }
+                    gameState.selectedAction='attack'; 
+                    statusText.textContent = `${gameState.playerNames[gameState.currentTurn]}：请点击敌方格子攻击 (本回合仅1次)`; 
+                } 
+            });
 
+            // 初始化
             initPlayerData(2);
             generateGrid();
             updateTurnIndicator();
