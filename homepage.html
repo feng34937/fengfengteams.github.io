@@ -35,14 +35,24 @@
                         gradientShift: {
                             '0%, 100%': { backgroundPosition: '0% 50%' },
                             '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
                         }
                     },
                     animation: {
                         float: 'float 5s ease-in-out infinite',
-                        fadeUp: 'fadeUp 0.8s ease-out forwards',
+                        fadeUp: 'fadeUp 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
                         glow: 'glow 3s ease-in-out infinite',
                         'spin-slow': 'spin 8s linear infinite',
                         'gradient': 'gradientShift 6s ease infinite',
+                        'scale-in': 'scaleIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+                        'slide-in-right': 'slideInRight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards'
                     }
                 }
             }
@@ -51,56 +61,128 @@
     <style>
         * { scroll-behavior: smooth; }
         
-        /* 导航栏玻璃效果 */
+        /* ===== 导航栏 - 彻底修复 ===== */
         #navbar {
-            background-color: rgba(255,255,255,0.6);
-            backdrop-filter: blur(12px) saturate(180%);
-            -webkit-backdrop-filter: blur(12px) saturate(180%);
-            border-bottom: 1px solid rgba(0,0,0,0.02);
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
-        }
-        .dark #navbar {
-            background-color: rgba(17,24,39,0.7);
-            backdrop-filter: blur(14px) saturate(200%);
-            -webkit-backdrop-filter: blur(14px) saturate(200%);
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        .navbar-scrolled {
-            background-color: rgba(255,255,255,0.85) !important;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.05);
-            transform: translateY(0) !important;
-        }
-        .dark .navbar-scrolled {
-            background-color: rgba(17,24,39,0.85) !important;
-            backdrop-filter: blur(16px) saturate(220%);
-            -webkit-backdrop-filter: blur(16px) saturate(220%);
-            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-        }
-        #mobileMenu {
-            background-color: rgba(255,255,255,0.92);
-            backdrop-filter: blur(10px);
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(12px) saturate(180%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
             transition: all 0.3s ease;
-            transform-origin: top;
-            animation: slideDown 0.3s ease-out;
+            z-index: 100000 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 12px 0;
         }
-        @keyframes slideDown {
-            from { opacity: 0; transform: scaleY(0.8); }
-            to { opacity: 1; transform: scaleY(1); }
+        
+        .dark #navbar {
+            background: rgba(17, 24, 39, 0.85) !important;
+            backdrop-filter: blur(14px) saturate(200%) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(200%) !important;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
+        
+        .navbar-scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
+        }
+        
+        .dark .navbar-scrolled {
+            background: rgba(17, 24, 39, 0.95) !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+        }
+        
+        /* 为固定导航栏留出空间 - 确保与标题栏完美接壤 */
+        body {
+            margin: 0;
+            padding-top: 74px !important;
+            background-color: white;
+            transition: background-color 0.3s ease;
+        }
+        
+        .dark body {
+            background-color: #1a1c1e;
+        }
+        
+        /* 移动端菜单 */
+        #mobileMenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            z-index: 99999;
+        }
+        
         .dark #mobileMenu {
-            background-color: rgba(17,24,39,0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid #2d2f31;
+            background: rgba(17, 24, 39, 0.95);
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* 深色模式适配 */
-        .dark body { background-color: #1a1c1e; color: #e5e7eb; }
+        /* 深色模式适配 - 浅红色主题 */
+        .dark body { background-color: #1a1c1e; }
         .dark .bg-secondary { background-color: #2d2f31; }
         .dark .bg-white { background-color: #26282b; }
         .dark .text-dark { color: #f3f4f6; }
-        .dark .bg-primary\/10 { background-color: rgba(180, 0, 0, 0.2); }
+        .dark .bg-primary\/10 { background-color: rgba(248, 113, 113, 0.2); }
+        .dark .text-gray-700 { color: #d1d5db !important; }
+        .dark .text-gray-600 { color: #9ca3af !important; }
+        
+        /* 深色模式下的文字颜色调整为浅红色 */
+        .dark .text-primary { color: #f87171 !important; }
+        .dark .btn-outline {
+            border-color: #f87171;
+            color: #f87171;
+        }
+        .dark .btn-outline:hover {
+            background-color: rgba(248, 113, 113, 0.1);
+        }
+        .dark .btn-partition {
+            border-color: #f87171;
+            color: #f87171;
+        }
+        .dark .btn-partition:hover {
+            background-color: rgba(248, 113, 113, 0.1);
+        }
+        .dark .timeline-item { border-left-color: #f87171; }
+        .dark .timeline-item::before { background: #f87171; }
+        .dark .carousel-arrow { 
+            color: #f87171 !important;
+            background: rgba(255, 255, 255, 0.2) !important;
+        }
+        .dark .carousel-arrow:hover { 
+            background: #f87171 !important; 
+            color: #1a1c1e !important; 
+        }
+        
+        /* 深色模式下卡片阴影调浅 */
+        .dark .card-hover:hover {
+            box-shadow: 0 30px 40px -15px rgba(248, 113, 113, 0.25) !important;
+        }
+        
+        .dark .demo-card:hover {
+            box-shadow: 0 20px 30px rgba(248, 113, 113, 0.15) !important;
+        }
+        
+        /* 修复深色模式下的动态渐变文字 */
+        .dark .dynamic-gradient-text {
+            background: linear-gradient(90deg, #f87171, #fca5a5, #f87171, #ef4444, #f87171) !important;
+            background-size: 300% 300% !important;
+            -webkit-background-clip: text !important;
+            background-clip: text !important;
+            color: transparent !important;
+            animation: gradientShift 8s ease infinite !important;
+        }
 
-        /* 动态渐变背景 - 专门为做大做强标题设计 */
+        /* 动态渐变背景 - 浅色模式 */
         .dynamic-gradient-text {
             background: linear-gradient(90deg, #8B0000, #b30000, #8B0000, #4A0000, #8B0000);
             background-size: 300% 300%;
@@ -112,7 +194,7 @@
             font-weight: 900;
         }
 
-        /* 轮播容器 - 增加3D效果 */
+        /* 轮播容器 - 优化自动轮播 */
         .carousel-container {
             position: relative;
             width: 100%;
@@ -126,6 +208,9 @@
         }
         .carousel-container:hover {
             box-shadow: 0 30px 50px -15px rgba(139,0,0,0.3);
+        }
+        .dark .carousel-container:hover {
+            box-shadow: 0 30px 50px -15px rgba(248, 113, 113, 0.3);
         }
         .carousel-track {
             display: flex;
@@ -144,7 +229,7 @@
         }
         .dark .carousel-card { background: #2d2f31; }
 
-        /* 箭头优化 + 动画 */
+        /* 箭头优化 - 深色模式已修复为浅红色 */
         .carousel-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
             width: 46px; height: 46px;
@@ -168,25 +253,29 @@
         .carousel-arrow.left { left: 12px; }
         .carousel-arrow.right { right: 12px; }
 
-        /* 指示器 + 弹性动画 */
+        /* 指示器 */
         .carousel-dot {
             width: 10px; height: 10px;
             background-color: #aaa;
             border-radius: 4px;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.3s ease;
             cursor: pointer;
         }
         .carousel-dot.active {
             width: 28px;
             background-color: #8B0000 !important;
-            transform: scale(1.1);
+        }
+        .dark .carousel-dot.active {
+            background-color: #f87171 !important;
         }
         .carousel-dot:hover {
-            transform: scale(1.2);
             background-color: #8B0000;
         }
+        .dark .carousel-dot:hover {
+            background-color: #f87171;
+        }
 
-        /* 卡片悬浮 + 高级动画 */
+        /* 卡片悬浮 - 优化动画，深色模式阴影已调浅 */
         .card-hover {
             transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             will-change: transform, box-shadow;
@@ -196,40 +285,48 @@
             box-shadow: 0 30px 40px -15px rgba(139,0,0,0.25);
         }
 
-        /* 历史时间线 - 增加进入动画 */
+        /* 时间线 - 适应多行文本 */
         .timeline-item {
             position: relative;
             padding-left: 2rem;
             border-left: 2px solid #8B0000;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
+            animation: slideInLine 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
             opacity: 0;
-            animation: slideInLine 0.6s ease-out forwards;
+            transform: translateX(-10px);
+            line-height: 1.6;
+        }
+        @keyframes slideInLine {
+            to { opacity: 1; transform: translateX(0); }
         }
         .timeline-item:nth-child(1) { animation-delay: 0.1s; }
-        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
-        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
-        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
-        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
-        @keyframes slideInLine {
-            0% { opacity: 0; transform: translateX(-15px); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
+        .timeline-item:nth-child(2) { animation-delay: 0.15s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.25s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(6) { animation-delay: 0.35s; }
+        .timeline-item:nth-child(7) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(8) { animation-delay: 0.45s; }
+        .timeline-item:nth-child(9) { animation-delay: 0.5s; }
+        .timeline-item:nth-child(10) { animation-delay: 0.55s; }
+        
         .timeline-item::before {
             content: '';
-            position: absolute; left: -7px; top: 0.3rem;
+            position: absolute; left: -7px; top: 0.5rem;
             width: 12px; height: 12px;
             border-radius: 4px;
             background: #8B0000;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
         .timeline-item:hover::before {
             transform: scale(1.3);
             box-shadow: 0 0 10px #8B0000;
         }
-        .dark .timeline-item { border-left-color: #b91c1c; }
-        .dark .timeline-item::before { background: #b91c1c; }
+        .dark .timeline-item:hover::before {
+            box-shadow: 0 0 10px #f87171;
+        }
 
-        /* 全新的头像样式 - 增加呼吸光效 */
+        /* 头像样式 */
         .team-avatar-wrapper {
             width: 128px;
             height: 128px;
@@ -242,7 +339,8 @@
             animation: glow 3s ease-in-out infinite;
         }
         .dark .team-avatar-wrapper {
-            box-shadow: 0 10px 20px -5px rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, #f87171 0%, #fca5a5 100%);
+            box-shadow: 0 10px 20px -5px #f87171;
         }
         .card-hover:hover .team-avatar-wrapper {
             transform: scale(1.05) rotate(2deg);
@@ -253,7 +351,6 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: #f0f0f0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -261,19 +358,23 @@
             font-weight: 800;
             color: #8B0000;
             background: white;
-            transition: background 0.3s ease;
         }
         .dark .team-avatar {
             background: #374151;
             color: #f87171;
         }
 
-        /* 按钮动画 */
+        /* 按钮 - 优化动画 */
         .btn-primary {
-            @apply bg-primary text-white px-8 py-3 rounded-md hover:bg-primary/90 transition-all shadow-md hover:shadow-lg;
+            background-color: #8B0000;
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            box-shadow: 0 4px 6px rgba(139,0,0,0.2);
+            display: inline-block;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
         .btn-primary::after {
             content: '';
@@ -291,61 +392,488 @@
             width: 300px;
             height: 300px;
         }
+        .btn-primary:hover {
+            background-color: #6b0000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(139,0,0,0.3);
+        }
+        .dark .btn-primary {
+            background-color: #f87171;
+            color: #1a1c1e;
+            box-shadow: 0 4px 6px rgba(248,113,113,0.3);
+        }
+        .dark .btn-primary:hover {
+            background-color: #fca5a5;
+        }
+        
         .btn-outline {
-            @apply border-2 border-primary text-primary px-8 py-3 rounded-md hover:bg-primary/5 transition-all;
+            border: 2px solid #8B0000;
+            color: #8B0000;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            display: inline-block;
             position: relative;
+            overflow: hidden;
+        }
+        .btn-outline:hover {
+            background-color: rgba(139,0,0,0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(139,0,0,0.15);
+        }
+        
+        .btn-partition {
+            border: 2px solid #8B0000;
+            color: #8B0000;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            background: transparent;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .btn-partition:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 12px rgba(139,0,0,0.2);
+            background-color: rgba(139,0,0,0.05);
+        }
+
+        /* ===== 鼠标靠近变色效果 - 优化版 ===== */
+        .hover-tint-card {
+            position: relative;
+            isolation: isolate;
             overflow: hidden;
             transition: all 0.3s ease;
         }
-        .btn-outline:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -8px rgba(139,0,0,0.4);
+        .hover-tint-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%), 
+                rgba(139, 0, 0, 0.25) 0%,
+                rgba(139, 0, 0, 0.08) 40%,
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 2;
+            border-radius: inherit;
+        }
+        .dark .hover-tint-card::before {
+            background: radial-gradient(
+                circle at var(--x, 50%) var(--y, 50%), 
+                rgba(248, 113, 113, 0.35) 0%,
+                rgba(248, 113, 113, 0.12) 40%,
+                transparent 70%
+            );
+        }
+        .hover-tint-card:hover::before {
+            opacity: 1;
+        }
+        .hover-tint-card > * {
+            position: relative;
+            z-index: 3;
         }
 
-        /* 视差滚动背景 */
-        .parallax-bg {
+        /* 整个标题栏靠近效果 - 与导航栏完美接壤 */
+        .hero-section {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            padding: 40px 0 60px 0;
+            margin-top: 0;
+        }
+        
+        .hero-section::before {
+            content: '';
             position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at var(--hero-x, 50%) var(--hero-y, 50%), 
+                rgba(139, 0, 0, 0.2) 0%,
+                rgba(139, 0, 0, 0.05) 40%,
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+            border-radius: 0;
+        }
+        
+        .dark .hero-section::before {
+            background: radial-gradient(
+                circle at var(--hero-x, 50%) var(--hero-y, 50%), 
+                rgba(248, 113, 113, 0.3) 0%,
+                rgba(248, 113, 113, 0.1) 40%,
+                transparent 70%
+            );
+        }
+        
+        .hero-section:hover::before {
+            opacity: 1;
+        }
+        
+        .hero-section > * {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===== 分区页面 - 移除所有阴影 ===== */
+        .section-page {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 20% 50%, rgba(139,0,0,0.03) 0%, transparent 50%);
-            pointer-events: none;
-            animation: moveBg 20s ease-in-out infinite;
+            height: 100vh;
+            background-color: white;
+            z-index: 50000;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+            box-shadow: none;
+            padding-top: 74px;
         }
-        @keyframes moveBg {
-            0%, 100% { transform: scale(1) translate(0, 0); }
-            25% { transform: scale(1.05) translate(2%, 1%); }
-            75% { transform: scale(1.05) translate(-2%, -1%); }
+        
+        .dark .section-page {
+            background-color: #1a1c1e;
+            box-shadow: none;
+        }
+        
+        .section-page.active {
+            transform: translateX(0);
+        }
+        
+        /* 遮罩层 */
+        .page-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 40000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+        
+        .page-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* 返回按钮 */
+        .nav-back-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(139, 0, 0, 0.1);
+            border: 1px solid rgba(139, 0, 0, 0.3);
+            color: #8B0000;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            margin-right: 15px;
+        }
+        
+        .dark .nav-back-button {
+            background: rgba(248, 113, 113, 0.1);
+            color: #f87171;
+            border-color: rgba(248, 113, 113, 0.3);
+        }
+        
+        .nav-back-button:hover {
+            background: #8B0000;
+            color: white;
+            transform: scale(1.05);
+        }
+        .dark .nav-back-button:hover {
+            background: #f87171;
+            color: #1a1c1e;
+        }
+        
+        /* 分区内容 - 优化布局 */
+        .section-content {
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: contentFadeIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) 0.1s both;
+        }
+        
+        @keyframes contentFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #8B0000;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: slideInRight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) 0.2s both;
+        }
+        
+        .dark .section-title { color: #f87171; }
+        
+        .section-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #8B0000;
+            margin: 30px 0 20px 0;
+            text-align: center;
+        }
+        
+        .dark .section-subtitle {
+            color: #f87171;
+        }
+        
+        /* 分区卡片网格 */
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .demo-card {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 35px 25px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            border: 1px solid rgba(139, 0, 0, 0.1);
+            animation: scaleIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+            opacity: 0;
+            box-shadow: none !important;
+        }
+        
+        .demo-card:nth-child(1) { animation-delay: 0.1s; }
+        .demo-card:nth-child(2) { animation-delay: 0.2s; }
+        .demo-card:nth-child(3) { animation-delay: 0.3s; }
+        
+        .dark .demo-card {
+            background: #2d2f31;
+            border-color: rgba(248,113,113,0.1);
+            box-shadow: none !important;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: none !important;
+        }
+        .dark .demo-card:hover {
+            box-shadow: none !important;
+        }
+        
+        .demo-icon {
+            font-size: 3.5rem;
+            color: #8B0000;
+            margin-bottom: 15px;
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+        
+        .demo-card:hover .demo-icon {
+            transform: scale(1.15) rotate(5deg);
+        }
+        
+        .dark .demo-icon { color: #f87171; }
+        
+        .demo-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .demo-card p {
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .dark .demo-card p {
+            color: #cbd5e0;
+        }
+        
+        /* 研发中特殊样式 */
+        .developing-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px dashed #8B0000;
+            box-shadow: none !important;
+        }
+        
+        .dark .developing-card {
+            background: linear-gradient(135deg, #2d2f31 0%, #374151 100%);
+            border: 2px dashed #f87171;
+            box-shadow: none !important;
+        }
+        
+        .developing-icon {
+            font-size: 4rem;
+            color: #8B0000;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .dark .developing-icon {
+            color: #f87171;
         }
 
-        /* 淡入动画 for sections */
-        .fade-section {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
+        /* 页脚链接样式 - 使其看起来像可点击的按钮 */
+        .footer-link {
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .fade-section.visible {
-            opacity: 1;
-            transform: translateY(0);
+        
+        .footer-link:hover {
+            color: #8B0000 !important;
+            transform: translateX(5px);
+        }
+        
+        .dark .footer-link:hover {
+            color: #f87171 !important;
+        }
+
+        /* 特别鸣谢模块样式 */
+        .thanks-section {
+            max-width: 800px;
+            margin: 60px auto 0;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(139,0,0,0.03) 0%, rgba(139,0,0,0.08) 100%);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .dark .thanks-section {
+            background: linear-gradient(135deg, rgba(248,113,113,0.03) 0%, rgba(248,113,113,0.08) 100%);
+        }
+        
+        .thanks-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #8B0000;
+            margin-bottom: 20px;
+        }
+        
+        .dark .thanks-title {
+            color: #f87171;
+        }
+        
+        .thanks-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .thanks-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .thanks-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .thanks-icon {
+            font-size: 3.5rem;
+            color: #8B0000;
+        }
+        
+        .dark .thanks-icon {
+            color: #f87171;
+        }
+        
+        .thanks-name {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #4a5568;
+        }
+        
+        .dark .thanks-name {
+            color: #cbd5e0;
+        }
+
+        /* 首页样式调整 - 完全删除空白，与导航栏完美接壤 */
+        #home {
+            position: relative;
+            z-index: 1;
+            margin-top: 0;
+            padding-top: 0;
+        }
+        
+        /* 容器 */
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+        
+        /* 动画 */
+        .animate-fadeUp {
+            animation: fadeUp 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+        }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(139,0,0,0.2); }
+            50% { box-shadow: 0 0 30px rgba(139,0,0,0.4); }
         }
     </style>
 </head>
-<body class="font-inter text-dark bg-white transition-colors duration-300 antialiased">
+<body class="font-inter text-dark antialiased">
+    <!-- 遮罩层 -->
+    <div class="page-overlay" id="pageOverlay" onclick="closeAllSections()"></div>
 
     <!-- 导航栏 -->
-    <nav id="navbar" class="fixed w-full top-0 z-50 py-3 transition-all">
+    <nav id="navbar" class="transition-all">
         <div class="container mx-auto px-5 md:px-10 flex justify-between items-center">
-            <a href="#" class="text-2xl font-black text-primary tracking-tight hover:scale-105 transition-transform duration-300 inline-block">凤峰团队</a>
+            <div class="flex items-center gap-4">
+                <div id="navBackButtonContainer" style="display: none;">
+                    <div class="nav-back-button" onclick="closeCurrentSection()">
+                        <i class="fas fa-chevron-left"></i> 返回
+                    </div>
+                </div>
+                <a href="#" class="text-2xl font-black text-primary tracking-tight hover:scale-105 transition-transform duration-300 inline-block">凤峰团队</a>
+            </div>
+            
             <div class="hidden md:flex items-center space-x-8 text-[0.95rem] font-medium">
                 <a href="#home" class="hover:text-primary transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full">首页</a>
                 <a href="#about" class="hover:text-primary transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full">关于我们</a>
                 <a href="#team" class="hover:text-primary transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full">团队成员</a>
                 <a href="#contact" class="hover:text-primary transition-colors relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-primary after:transition-all after:duration-300 hover:after:w-full">联系我们</a>
                 <button id="darkModeToggle" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 hover:rotate-12">
-                    <i id="darkModeIcon" class="fas fa-moon text-primary text-lg transition-transform duration-300"></i>
+                    <i id="darkModeIcon" class="fas fa-moon text-primary text-lg"></i>
                 </button>
             </div>
+            
             <div class="flex items-center gap-3 md:hidden">
                 <button id="darkModeToggleMobile" class="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 hover:rotate-12">
                     <i id="darkModeIconMobile" class="fas fa-moon text-primary text-lg"></i>
@@ -353,7 +881,8 @@
                 <button id="menuBtn" class="text-2xl text-dark hover:text-primary transition-colors duration-300"><i class="fas fa-bars"></i></button>
             </div>
         </div>
-        <div id="mobileMenu" class="hidden md:hidden absolute w-full left-0 mt-1 shadow-xl">
+        
+        <div id="mobileMenu" class="hidden md:hidden">
             <div class="container mx-auto px-5 py-5 flex flex-col space-y-4 text-base font-medium">
                 <a href="#home" class="hover:text-primary py-1 transition-all duration-300 hover:translate-x-2">首页</a>
                 <a href="#about" class="hover:text-primary py-1 transition-all duration-300 hover:translate-x-2">关于我们</a>
@@ -363,274 +892,496 @@
         </div>
     </nav>
 
-    <!-- 英雄区 - 动态渐变文字 -->
-    <section id="home" class="pt-36 pb-28 md:pt-44 md:pb-36 bg-secondary relative overflow-hidden">
-        <div class="parallax-bg"></div>
-        <div class="container mx-auto px-5 md:px-10 text-center relative z-10">
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-black leading-tight animate-fadeUp">
-                <span class="dynamic-gradient-text">做大做强</span>
-                <span class="text-primary block mt-2 animate-float">兴创辉煌</span>
-            </h1>
-            <p class="text-lg md:text-2xl max-w-3xl mx-auto mt-6 text-gray-700 dark:text-gray-300 leading-relaxed opacity-0 animate-fadeUp" style="animation-delay: 0.2s; animation-fill-mode: forwards;">
-                我们致力于用创意与代码连接校园与未来，打造有温度的智能工具、<br>有深度的互动体验，让每一次探索都成为成长的契机。
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-5 mt-12 opacity-0 animate-fadeUp" style="animation-delay: 0.4s; animation-fill-mode: forwards;">
-                <a href="#about" class="btn-primary">了解我们</a>
-                <a href="#contact" class="btn-outline">联系我们</a>
-            </div>
-        </div>
-        <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
-    </section>
-
-    <!-- 关于我们 · 轮播 & 年表 -->
-    <section id="about" class="py-24 md:py-32 fade-section">
-        <div class="container mx-auto px-5 md:px-10">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-20 opacity-0 animate-fadeUp" style="animation-delay: 0.1s; animation-fill-mode: forwards;">关于凤峰团队</h2>
-
-            <!-- 最近消息轮播 -->
-            <div class="max-w-5xl mx-auto mb-32">
-                <div class="text-center mb-12 opacity-0 animate-fadeUp" style="animation-delay: 0.2s; animation-fill-mode: forwards;">
-                    <span class="text-primary font-bold text-sm tracking-widest uppercase">LATEST</span>
-                    <h3 class="text-3xl md:text-4xl font-bold mt-1">最近消息 · 动态</h3>
-                    <p class="text-gray-500 dark:text-gray-400 mt-2">点击卡片按钮直达详情页</p>
+    <!-- 主要内容 -->
+    <main>
+        <!-- 英雄区 - 整个标题栏都有靠近效果，与导航栏完美接壤 -->
+        <section id="home" class="bg-secondary relative overflow-hidden">
+            <div class="hero-section" onmousemove="updateHeroMaskPosition(event)" onmouseleave="resetHeroMask(event)">
+                <div class="parallax-bg absolute inset-0 pointer-events-none"></div>
+                <div class="container mx-auto px-5 md:px-10 text-center relative z-10 py-16 md:py-20">
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-black leading-tight">
+                        <span class="dynamic-gradient-text">做大做强</span>
+                        <span class="text-primary block mt-2 animate-float">兴创辉煌</span>
+                    </h1>
+                    <p class="text-lg md:text-2xl max-w-3xl mx-auto mt-6 text-gray-700 dark:text-gray-300 leading-relaxed">
+                        我们致力于用创意与代码连接校园与未来，打造有温度的智能工具、<br>有深度的互动体验，让每一次探索都成为成长的契机。
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-5 mt-12">
+                        <a href="#about" class="btn-primary">了解我们</a>
+                        <a href="#contact" class="btn-outline">联系我们</a>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-4 mt-8">
+                        <button class="btn-partition" onclick="openSection('tools')"><i class="fas fa-tools mr-2"></i>工具分区</button>
+                        <button class="btn-partition" onclick="openSection('games')"><i class="fas fa-gamepad mr-2"></i>游戏分区</button>
+                        <button class="btn-partition" onclick="openSection('others')"><i class="fas fa-ellipsis-h mr-2"></i>其他分区</button>
+                    </div>
                 </div>
+                <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+            </div>
+        </section>
 
-                <div class="carousel-container opacity-0 animate-fadeUp" style="animation-delay: 0.3s; animation-fill-mode: forwards;">
-                    <button class="carousel-arrow left" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
-                    <button class="carousel-arrow right" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
-                    <div class="carousel-track" id="carouselTrack">
-                        <!-- 卡片 1 现代战争推演2 -->
-                        <div class="carousel-card">
-                            <div class="flex flex-col items-center p-12 w-full">
-                                <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-gamepad text-primary text-8xl"></i></div>
-                                <h4 class="text-4xl font-black text-primary mb-6">现代战争推演2</h4>
-                                <button onclick="window.open('https://feng34937.github.io/fengfengteam/modern_warefare_2.html', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right transition-transform duration-300 group-hover:translate-x-1"></i></button>
+        <!-- 关于我们 -->
+        <section id="about" class="py-24 md:py-32">
+            <div class="container mx-auto px-5 md:px-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-20 animate-fadeUp">关于凤峰团队</h2>
+
+                <!-- 轮播 - 自动轮播，深色模式按钮已修复为浅红色 -->
+                <div class="max-w-5xl mx-auto mb-32">
+                    <div class="text-center mb-12">
+                        <span class="text-primary font-bold text-sm tracking-widest uppercase">LATEST</span>
+                        <h3 class="text-3xl md:text-4xl font-bold mt-1">最新消息 · 动态</h3>
+                        <p class="text-gray-500 dark:text-gray-400 mt-2">自动轮播展示团队最新动态</p>
+                    </div>
+
+                    <div class="carousel-container animate-scale-in">
+                        <button class="carousel-arrow left" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
+                        <button class="carousel-arrow right" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- 卡片 1 - 现代战争推演2 -->
+                            <div class="carousel-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                                <div class="flex flex-col items-center p-12 w-full">
+                                    <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-gamepad text-primary text-8xl"></i></div>
+                                    <h4 class="text-4xl font-black text-primary mb-6">现代战争推演2</h4>
+                                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">全新版本现已发布</p>
+                                    <button onclick="window.open('https://feng34937.github.io/fengfengteam/modern_warefare_2.html', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                            <!-- 卡片 2 - 同学信息收集 -->
+                            <div class="carousel-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                                <div class="flex flex-col items-center p-12">
+                                    <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-users text-primary text-8xl"></i></div>
+                                    <h4 class="text-4xl font-black text-primary mb-6">同学信息收集</h4>
+                                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">希望我们能一起走过共同岁月</p>
+                                    <button onclick="window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAoeHI6JUN082MzBINTJaOEpLVUJWREJMSFVTTlgzWC4u', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                            <!-- 卡片 3 - 凤峰团队招聘 -->
+                            <div class="carousel-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                                <div class="flex flex-col items-center p-12">
+                                    <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-briefcase text-primary text-8xl"></i></div>
+                                    <h4 class="text-4xl font-black text-primary mb-6 text-center">凤峰团队招聘</h4>
+                                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">加入我们，共创未来</p>
+                                    <button onclick="window.open('https://sway.cloud.microsoft/s/CG8U19PLYKAlBl1k/embed', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                            <!-- 卡片 4 - 公测成员招募 -->
+                            <div class="carousel-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                                <div class="flex flex-col items-center p-12">
+                                    <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-rocket text-primary text-8xl"></i></div>
+                                    <h4 class="text-4xl font-black text-primary mb-6 text-center">公测成员招募</h4>
+                                    <p class="text-lg text-gray-600 dark:text-gray-400 mb-6">首批公测成员火热招募中</p>
+                                    <button onclick="window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAoeHI6JURU1ERTlGR0k3Ulk2UUYwTDJQRk5KMEtIUy4u', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right"></i></button>
+                                </div>
                             </div>
                         </div>
-                        <!-- 卡片 2 同学信息收集 -->
-                        <div class="carousel-card">
-                            <div class="flex flex-col items-center p-12">
-                                <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-users text-primary text-8xl"></i></div>
-                                <h4 class="text-4xl font-black text-primary mb-6">同学信息收集</h4>
-                                <button onclick="window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAoeHI6JUN082MzBINTJaOEpLVUJWREJMSFVTTlgzWC4u', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right"></i></button>
-                            </div>
+                    </div>
+                    <div class="flex justify-center items-center space-x-3 mt-8">
+                        <button id="dot0" class="carousel-dot" onclick="goToSlide(0)"></button>
+                        <button id="dot1" class="carousel-dot" onclick="goToSlide(1)"></button>
+                        <button id="dot2" class="carousel-dot" onclick="goToSlide(2)"></button>
+                        <button id="dot3" class="carousel-dot" onclick="goToSlide(3)"></button>
+                    </div>
+                </div>
+
+                <!-- 历史年表 - 更新为10条内容 -->
+                <div class="max-w-6xl mx-auto">
+                    <h3 class="text-3xl md:text-4xl font-bold text-center mb-16">📆 里程碑 · 我们的故事</h3>
+                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-4 bg-secondary p-8 md:p-12 rounded-md shadow-md">
+                        <div class="space-y-4">
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">1.</span>2025年11月1日，凤峰团队正式建立并确定元老院成员与简体标志；元老院共5人，分别为凤峰、申宋凯、刘霆泳、陈思齐、麦承钊（乱序），其中，凤峰为元首，申宋凯为临时副元首。</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2.</span>2025年11月2日，确定繁体与英文标志；</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">3.</span>2025年12月1日，发布“同学信息收集”（Preview版）；</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">4.</span>2025年12月29日，正式于“QQ”聊天软件建立群聊；</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">5.</span>2025年12月30日，确定预览体验成员；预览体验成员共5人，分别为孙语宸、赵当当、蒋筳瀚、王玉珊、刘哲勋（按加入顺序排序）。</div>
                         </div>
-                        <!-- 卡片 3 凤峰团队招聘 -->
-                        <div class="carousel-card">
-                            <div class="flex flex-col items-center p-12">
-                                <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-briefcase text-primary text-8xl"></i></div>
-                                <h4 class="text-4xl font-black text-primary mb-6 text-center">凤峰团队招聘</h4>
-                                <button onclick="window.open('https://sway.cloud.microsoft/s/CG8U19PLYKAlBl1k/embed', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                        <!-- 卡片 4 公测成员招募 -->
-                        <div class="carousel-card">
-                            <div class="flex flex-col items-center p-12">
-                                <div class="bg-primary/10 p-10 rounded-md mb-6 hover:scale-105 transition-transform duration-300"><i class="fas fa-rocket text-primary text-8xl"></i></div>
-                                <h4 class="text-4xl font-black text-primary mb-6 text-center">公测成员招募</h4>
-                                <button onclick="window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAoeHI6JURU1ERTlGR0k3Ulk2UUYwTDJQRk5KMEtIUy4u', '_blank')" class="btn-primary text-lg flex items-center gap-2">点击查看 <i class="fas fa-arrow-right"></i></button>
-                            </div>
+                        <div class="space-y-4">
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">6.</span>2026年1月9日，发布“同学信息收集”。</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">7.</span>2026年1月20日，凤峰团队第一次代表大会于桂林市第一中学召开；此次会议中，元老院所有人均参加，确定了凤峰团队的口号为“做大做强 兴创辉煌”，并决定扩招计划，发出了预稿招聘单第1版。</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">8.</span>2026年2月3日，发出了预稿招聘单第2版及预稿招聘第1版；</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">9.</span>2026年2月7日，凤峰团队第二次代表大会于线上（“QQ”聊天软件）召开；此次会议中，元老院中申宋凯、刘霆泳未参加，元老院其他成员均参加，确定了副元首为麦承钊，并决定正式扩招计划，并决定于2026年2月12日发布招聘单1及招聘1（由于种种原因，最终于2026年2月16日发布）。</div>
+                            <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">10.</span>2026年3月11日，凤峰团队第三次代表大会于桂林市第一中学召开；此次会议中，元老院所有人均参加，另外两位预览体验成员（孙语宸、蒋筳瀚）亦于兹参加，大会确定了凤峰团队主要制作实用工具和游戏，并决定将孙语宸、蒋筳瀚升级为正式职员，将凤峰团队代表大会名称更为凤峰团队元老大会或凤峰团队全体大会，还决定发布凤峰团队官网及现代战争推演系列并持续更新。本次大会确定了凤峰团队未来的工作方向，对凤峰团队具有重要意义。</div>
                         </div>
                     </div>
                 </div>
-                <!-- 指示器 -->
-                <div class="flex justify-center items-center space-x-3 mt-8">
-                    <button id="dot0" class="carousel-dot" onclick="goToSlide(0)"></button>
-                    <button id="dot1" class="carousel-dot" onclick="goToSlide(1)"></button>
-                    <button id="dot2" class="carousel-dot" onclick="goToSlide(2)"></button>
-                    <button id="dot3" class="carousel-dot" onclick="goToSlide(3)"></button>
+            </div>
+        </section>
+
+        <!-- 核心团队 -->
+        <section id="team" class="py-24 md:py-32 bg-secondary">
+            <div class="container mx-auto px-5 md:px-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">核心团队</h2>
+                <p class="text-xl text-center max-w-2xl mx-auto mb-16 opacity-80">五名元老，各司其职，共同驱动团队创新</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-7">
+                    <!-- 凤峰 -->
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.1s;" onmousemove="updateMaskPosition(event)">
+                        <div class="team-avatar-wrapper"><div class="team-avatar">凤</div></div>
+                        <h3 class="text-2xl font-bold">凤峰</h3>
+                        <p class="text-primary font-medium mb-3">团长 / 产品架构师</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">团队创始人，负责整体产品方向与核心设计。</p>
+                    </div>
+                    <!-- 麦承钊 -->
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.2s;" onmousemove="updateMaskPosition(event)">
+                        <div class="team-avatar-wrapper"><div class="team-avatar">麦</div></div>
+                        <h3 class="text-2xl font-bold">麦承钊</h3>
+                        <p class="text-primary font-medium mb-3">副团长 / 技术总监</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">技术架构与服务器，保障产品稳定运行。</p>
+                    </div>
+                    <!-- 刘霆泳 -->
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.3s;" onmousemove="updateMaskPosition(event)">
+                        <div class="team-avatar-wrapper"><div class="team-avatar">刘</div></div>
+                        <h3 class="text-2xl font-bold">刘霆泳</h3>
+                        <p class="text-primary font-medium mb-3">前端 / UI设计</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">界面与交互体验，打造友好视觉。</p>
+                    </div>
+                    <!-- 申颂凯 -->
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.4s;" onmousemove="updateMaskPosition(event)">
+                        <div class="team-avatar-wrapper"><div class="team-avatar">申</div></div>
+                        <h3 class="text-2xl font-bold">申颂凯</h3>
+                        <p class="text-primary font-medium mb-3">后端 / 算法</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">算法优化与后端逻辑，提升系统效率。</p>
+                    </div>
+                    <!-- 陈思齐 -->
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.5s;" onmousemove="updateMaskPosition(event)">
+                        <div class="team-avatar-wrapper"><div class="team-avatar">陈</div></div>
+                        <h3 class="text-2xl font-bold">陈思齐</h3>
+                        <p class="text-primary font-medium mb-3">测试 / 质量保障</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">全流程测试，确保产品体验与稳定性。</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- 历史年表 两栏 -->
-            <div class="max-w-6xl mx-auto">
-                <h3 class="text-3xl md:text-4xl font-bold text-center mb-16 opacity-0 animate-fadeUp" style="animation-delay: 0.4s; animation-fill-mode: forwards;">📆 里程碑 · 我们的故事</h3>
-                <div class="grid md:grid-cols-2 gap-x-12 gap-y-6 bg-secondary p-8 md:p-12 rounded-md shadow-md">
-                    <div class="space-y-4">
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2025.11.1</span>凤峰团队正式建立并确定元老院成员与简体标志；元老院共5人，分别为凤峰、申宋凯、刘霆泳、陈思齐、麦承钊（乱序），其中，凤峰为元首，申宋凯为临时副元首。</div>
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2025.11.2</span>确定繁体与英文标志。</div>
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2025.12.1</span>发布“同学信息收集”（Preview版）。</div>
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2025.12.29</span>正式于“QQ”聊天软件建立群聊。</div>
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2025.12.30</span>确定预览体验成员；预览体验成员共5人，分别为孙语宸、赵当当、蒋筳瀚、王玉珊、刘哲勋（按加入顺序排序）。</div>
+        <!-- 联系我们 + 特别鸣谢 -->
+        <section id="contact" class="py-24 md:py-32">
+            <div class="container mx-auto px-5 md:px-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">保持联系</h2>
+                <p class="text-xl text-center max-w-2xl mx-auto mb-16">任何想法、合作或疑问，欢迎随时找到我们</p>
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 bg-secondary p-8 md:p-10 rounded-md shadow-md">
+                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.1s;" onmousemove="updateMaskPosition(event)">
+                        <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-map-marker-alt text-primary text-2xl"></i></div>
+                        <div><h4 class="font-bold text-lg">地址</h4><p class="text-gray-700 dark:text-gray-300">桂林市第一中学</p></div>
                     </div>
-                    <div class="space-y-4">
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2026.1.9</span>发布“同学信息收集”。</div>
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2026.1.20</span>凤峰团队第一次代表大会于桂林市第一中学召开；此次会议中，元老院所有人均参加，确定了凤峰团队的口号为“做大做强 兴创辉煌”，并决定扩招计划，发出了预稿招聘单第1版。</div>
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2026.2.3</span>发出了预稿招聘单第2版及预稿招聘第1版。</div>
-                        <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">2026.2.7</span>凤峰团队第二次代表大会于线上（“QQ”聊天软件）召开；此次会议中，元老院中申宋凯、刘霆泳未参加，元老院其他成员均参加，确定了副元首为麦承钊，并决定正式扩招计划，并决定于2026年2月12日发布招聘单1及招聘1（由于种种原因，最终于2026年2月16日发布）。</div>
+                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.2s;" onmousemove="updateMaskPosition(event)">
+                        <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-phone text-primary text-2xl"></i></div>
+                        <div><h4 class="font-bold text-lg">电话</h4><p class="text-gray-700 dark:text-gray-300">+86 152 0773 8425</p></div>
                     </div>
+                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.3s;" onmousemove="updateMaskPosition(event)">
+                        <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-envelope text-primary text-2xl"></i></div>
+                        <div><h4 class="font-bold text-lg">邮箱</h4><p class="text-gray-700 dark:text-gray-300">3493792731@qq.com</p></div>
+                    </div>
+                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.4s;" onmousemove="updateMaskPosition(event)">
+                        <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-clock text-primary text-2xl"></i></div>
+                        <div><h4 class="font-bold text-lg">工作时间</h4><p class="text-gray-700 dark:text-gray-300">周一至五 9:00 - 18:00</p></div>
+                    </div>
+                </div>
+
+                <!-- 特别鸣谢模块 -->
+                <div class="thanks-section">
+                    <h3 class="thanks-title">特别鸣谢</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">感谢以下平台对凤峰团队的支持与帮助</p>
+                    <div class="thanks-grid">
+                        <div class="thanks-item">
+                            <i class="fab fa-github thanks-icon"></i>
+                            <span class="thanks-name">GitHub</span>
+                        </div>
+                        <div class="thanks-item">
+                            <i class="fab fa-microsoft thanks-icon"></i>
+                            <span class="thanks-name">Microsoft</span>
+                        </div>
+                        <div class="thanks-item">
+                            <i class="fas fa-brain thanks-icon"></i>
+                            <span class="thanks-name">DeepSeek</span>
+                        </div>
+                        <div class="thanks-item">
+                            <i class="fas fa-file-alt thanks-icon"></i>
+                            <span class="thanks-name">金山办公</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="bg-dark text-white py-14">
+            <div class="container mx-auto px-5 md:px-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+                    <div><h3 class="text-2xl font-bold mb-4 text-primary">凤峰团队</h3><p class="text-gray-300 leading-relaxed text-sm">致力于实用的工具和有趣的小游戏，带来便捷和欢乐。</p></div>
+                    <div><h3 class="text-lg font-bold mb-4">快速链接</h3><ul class="space-y-2 text-sm text-gray-300"><li><a href="#home" class="hover:text-primary transition hover:translate-x-1 inline-block">首页</a></li><li><a href="#about" class="hover:text-primary transition hover:translate-x-1 inline-block">关于我们</a></li><li><a href="#team" class="hover:text-primary transition hover:translate-x-1 inline-block">团队成员</a></li><li><a href="#contact" class="hover:text-primary transition hover:translate-x-1 inline-block">联系我们</a></li></ul></div>
+                    <!-- 产品系列 - 改为三个分区链接，点击效果与按钮相同 -->
+                    <div><h3 class="text-lg font-bold mb-4">产品系列</h3><ul class="space-y-2 text-sm text-gray-300">
+                        <li><a class="footer-link hover:text-primary transition inline-block" onclick="openSection('tools')">工具分区</a></li>
+                        <li><a class="footer-link hover:text-primary transition inline-block" onclick="openSection('games')">游戏分区</a></li>
+                        <li><a class="footer-link hover:text-primary transition inline-block" onclick="openSection('others')">其他分区</a></li>
+                    </ul></div>
+                    <div><h3 class="text-lg font-bold mb-4">联系方式</h3><ul class="space-y-2 text-sm text-gray-300"><li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary w-4"></i>桂林市第一中学</li><li class="flex items-center gap-2"><i class="fas fa-phone text-primary w-4"></i>+86 152 0773 8425</li><li class="flex items-center gap-2"><i class="fas fa-envelope text-primary w-4"></i>3493792731@qq.com</li></ul></div>
+                </div>
+                <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
+                    <p>&copy; 2026 凤峰团队 · 保留所有权利</p>
+                    <div class="flex space-x-4 mt-3 md:mt-0">
+                        <a href="https://sway.office.com/s/pN9w3GwXo0MHuX7C/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block">隐私政策</a>
+                        <span>|</span>
+                        <a href="https://sway.office.com/s/OOMZpzkY5Ksrff2q/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block">用户协议</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- 工具分区 - 正在研发中 -->
+    <div id="toolsSection" class="section-page">
+        <div class="section-content">
+            <h1 class="section-title">工具分区</h1>
+            <p class="text-center text-xl text-gray-600 dark:text-gray-400 mb-12">致力于打造实用的工具，提高效率</p>
+            
+            <div class="demo-grid">
+                <div class="demo-card developing-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                    <i class="fas fa-tools developing-icon"></i>
+                    <h3 class="text-2xl font-bold mb-4">正在研发中</h3>
+                    <p class="text-gray-600 dark:text-gray-400">工具分区正在紧锣密鼓地开发中，敬请期待！</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- 团队成员 · 全新头像展示区 -->
-    <section id="team" class="py-24 md:py-32 bg-secondary fade-section">
-        <div class="container mx-auto px-5 md:px-10">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-6 opacity-0 animate-fadeUp" style="animation-delay: 0.1s; animation-fill-mode: forwards;">核心团队</h2>
-            <p class="text-xl text-center max-w-2xl mx-auto mb-16 opacity-80 opacity-0 animate-fadeUp" style="animation-delay: 0.2s; animation-fill-mode: forwards;">五名元老，各司其职，共同驱动团队创新</p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-7">
-                <!-- 凤峰 -->
-                <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center opacity-0 animate-fadeUp" style="animation-delay: 0.25s; animation-fill-mode: forwards;">
-                    <div class="team-avatar-wrapper">
-                        <div class="team-avatar">凤</div>
-                    </div>
-                    <h3 class="text-2xl font-bold">凤峰</h3>
-                    <p class="text-primary font-medium mb-3">团长 / 产品架构师</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">团队创始人，负责整体产品方向与核心设计。</p>
+    <!-- 游戏分区 - 现代战争推演系列 -->
+    <div id="gamesSection" class="section-page">
+        <div class="section-content">
+            <h1 class="section-title">游戏分区</h1>
+            <p class="text-center text-xl text-gray-600 dark:text-gray-400 mb-12">探索现代战争推演系列游戏</p>
+            
+            <div class="demo-grid">
+                <div class="demo-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                    <i class="fas fa-gamepad demo-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">现代战争推演1</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">经典战略游戏，考验你的指挥能力</p>
+                    <button class="btn-primary text-sm" style="background-color: #6c757d; cursor: default;" onmouseover="this.style.backgroundColor='#6c757d'" onmouseout="this.style.backgroundColor='#6c757d'">请在线下参与</button>
                 </div>
-                <!-- 麦承钊 -->
-                <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center opacity-0 animate-fadeUp" style="animation-delay: 0.35s; animation-fill-mode: forwards;">
-                    <div class="team-avatar-wrapper">
-                        <div class="team-avatar">麦</div>
-                    </div>
-                    <h3 class="text-2xl font-bold">麦承钊</h3>
-                    <p class="text-primary font-medium mb-3">副团长 / 技术总监</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">技术架构与服务器，保障产品稳定运行。</p>
+                <div class="demo-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                    <i class="fas fa-crosshairs demo-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">现代战争推演2</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">全新版本，更多兵种，更真实的战场</p>
+                    <button onclick="window.open('https://feng34937.github.io/fengfengteam/modern_warefare_2.html', '_blank')" class="btn-primary text-sm">点击试玩</button>
                 </div>
-                <!-- 刘霆泳 -->
-                <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center opacity-0 animate-fadeUp" style="animation-delay: 0.45s; animation-fill-mode: forwards;">
-                    <div class="team-avatar-wrapper">
-                        <div class="team-avatar">刘</div>
-                    </div>
-                    <h3 class="text-2xl font-bold">刘霆泳</h3>
-                    <p class="text-primary font-medium mb-3">前端 / UI设计</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">界面与交互体验，打造友好视觉。</p>
-                </div>
-                <!-- 申颂凯 -->
-                <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center opacity-0 animate-fadeUp" style="animation-delay: 0.55s; animation-fill-mode: forwards;">
-                    <div class="team-avatar-wrapper">
-                        <div class="team-avatar">申</div>
-                    </div>
-                    <h3 class="text-2xl font-bold">申颂凯</h3>
-                    <p class="text-primary font-medium mb-3">后端 / 算法</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">算法优化与后端逻辑，提升系统效率。</p>
-                </div>
-                <!-- 陈思齐 -->
-                <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center opacity-0 animate-fadeUp" style="animation-delay: 0.65s; animation-fill-mode: forwards;">
-                    <div class="team-avatar-wrapper">
-                        <div class="team-avatar">陈</div>
-                    </div>
-                    <h3 class="text-2xl font-bold">陈思齐</h3>
-                    <p class="text-primary font-medium mb-3">测试 / 质量保障</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">全流程测试，确保产品体验与稳定性。</p>
+                <div class="demo-card hover-tint-card developing-card" onmousemove="updateMaskPosition(event)">
+                    <i class="fas fa-rocket demo-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">现代战争推演3</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">即将推出，敬请期待</p>
+                    <span class="text-primary text-sm">研发中</span>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- 联系我们 -->
-    <section id="contact" class="py-24 md:py-32 fade-section">
-        <div class="container mx-auto px-5 md:px-10">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-6 opacity-0 animate-fadeUp" style="animation-delay: 0.1s; animation-fill-mode: forwards;">保持联系</h2>
-            <p class="text-xl text-center max-w-2xl mx-auto mb-16 opacity-0 animate-fadeUp" style="animation-delay: 0.2s; animation-fill-mode: forwards;">任何想法、合作或疑问，欢迎随时找到我们</p>
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 bg-secondary p-8 md:p-10 rounded-md shadow-md opacity-0 animate-fadeUp" style="animation-delay: 0.3s; animation-fill-mode: forwards;">
-                <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300"><div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-map-marker-alt text-primary text-2xl"></i></div><div><h4 class="font-bold text-lg">地址</h4><p class="text-gray-700 dark:text-gray-300">桂林市第一中学</p></div></div>
-                <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300"><div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-phone text-primary text-2xl"></i></div><div><h4 class="font-bold text-lg">电话</h4><p class="text-gray-700 dark:text-gray-300">+86 152 0773 8425</p></div></div>
-                <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300"><div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-envelope text-primary text-2xl"></i></div><div><h4 class="font-bold text-lg">邮箱</h4><p class="text-gray-700 dark:text-gray-300">3493792731@qq.com</p></div></div>
-                <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300"><div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-clock text-primary text-2xl"></i></div><div><h4 class="font-bold text-lg">工作时间</h4><p class="text-gray-700 dark:text-gray-300">周一至五 9:00 - 18:00</p></div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 页脚 -->
-    <footer class="bg-dark text-white py-14">
-        <div class="container mx-auto px-5 md:px-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
-                <div class="opacity-0 animate-fadeUp" style="animation-delay: 0.1s; animation-fill-mode: forwards;"><h3 class="text-2xl font-bold mb-4 text-primary">凤峰团队</h3><p class="text-gray-300 leading-relaxed text-sm">致力于实用的工具和有趣的小游戏，带来便捷和欢乐。</p></div>
-                <div class="opacity-0 animate-fadeUp" style="animation-delay: 0.2s; animation-fill-mode: forwards;"><h3 class="text-lg font-bold mb-4">快速链接</h3><ul class="space-y-2 text-sm text-gray-300"><li><a href="#home" class="hover:text-primary transition hover:translate-x-1 inline-block">首页</a></li><li><a href="#about" class="hover:text-primary transition hover:translate-x-1 inline-block">关于我们</a></li><li><a href="#team" class="hover:text-primary transition hover:translate-x-1 inline-block">团队成员</a></li><li><a href="#contact" class="hover:text-primary transition hover:translate-x-1 inline-block">联系我们</a></li></ul></div>
-                <div class="opacity-0 animate-fadeUp" style="animation-delay: 0.3s; animation-fill-mode: forwards;"><h3 class="text-lg font-bold mb-4">产品系列</h3><ul class="space-y-2 text-sm text-gray-300"><li><a href="#" class="hover:text-primary transition hover:translate-x-1 inline-block">现代战争推演2</a></li><li><a href="#" class="hover:text-primary transition hover:translate-x-1 inline-block">同学信息收集</a></li><li><a href="#" class="hover:text-primary transition hover:translate-x-1 inline-block">凤峰招聘</a></li><li><a href="#" class="hover:text-primary transition hover:translate-x-1 inline-block">公测计划</a></li></ul></div>
-                <div class="opacity-0 animate-fadeUp" style="animation-delay: 0.4s; animation-fill-mode: forwards;"><h3 class="text-lg font-bold mb-4">联系方式</h3><ul class="space-y-2 text-sm text-gray-300"><li class="flex items-center gap-2"><i class="fas fa-map-marker-alt text-primary w-4"></i>桂林市第一中学</li><li class="flex items-center gap-2"><i class="fas fa-phone text-primary w-4"></i>+86 152 0773 8425</li><li class="flex items-center gap-2"><i class="fas fa-envelope text-primary w-4"></i>3493792731@qq.com</li></ul></div>
-            </div>
-            <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
-                <p>&copy; 2026 凤峰团队 · 保留所有权利</p>
-                <div class="flex space-x-4 mt-3 md:mt-0">
-                    <a href="https://sway.office.com/s/pN9w3GwXo0MHuX7C/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block">隐私政策</a>
-                    <span>|</span>
-                    <a href="https://sway.office.com/s/OOMZpzkY5Ksrff2q/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block">用户协议</a>
+    <!-- 其他分区 - 同学信息收集、招聘、公测 -->
+    <div id="othersSection" class="section-page">
+        <div class="section-content">
+            <h1 class="section-title">其他分区</h1>
+            <p class="text-center text-xl text-gray-600 dark:text-gray-400 mb-12">更多精彩内容</p>
+            
+            <div class="demo-grid">
+                <div class="demo-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                    <i class="fas fa-users demo-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">同学信息收集</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">希望我们能一起走过共同岁月</p>
+                    <button onclick="window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAoeHI6JUN082MzBINTJaOEpLVUJWREJMSFVTTlgzWC4u', '_blank')" class="btn-primary text-sm">立即使用</button>
+                </div>
+                <div class="demo-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                    <i class="fas fa-briefcase demo-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">凤峰团队招聘</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">加入我们，一起创造未来</p>
+                    <button onclick="window.open('https://sway.cloud.microsoft/s/CG8U19PLYKAlBl1k/embed', '_blank')" class="btn-primary text-sm">查看职位</button>
+                </div>
+                <div class="demo-card hover-tint-card" onmousemove="updateMaskPosition(event)">
+                    <i class="fas fa-rocket demo-icon"></i>
+                    <h3 class="text-2xl font-bold mb-2">成为公测成员</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">抢先体验最新产品，参与产品改进</p>
+                    <button onclick="window.open('https://forms.office.com/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAANAAoeHI6JURU1ERTlGR0k3Ulk2UUYwTDJQRk5KMEtIUy4u', '_blank')" class="btn-primary text-sm">立即报名</button>
                 </div>
             </div>
         </div>
-    </footer>
+    </div>
 
-    <!-- JS 交互 + 滚动动画触发 -->
     <script>
-        (function() {
-            // 导航栏滚动
-            window.addEventListener('scroll', ()=>document.getElementById('navbar')?.classList.toggle('navbar-scrolled', scrollY>50));
-
-            // 移动端菜单
-            const menuBtn=document.getElementById('menuBtn'), mobileMenu=document.getElementById('mobileMenu');
-            if(menuBtn&&mobileMenu){
-                menuBtn.onclick=()=>mobileMenu.classList.toggle('hidden');
-                mobileMenu.querySelectorAll('a').forEach(l=>l.addEventListener('click',()=>mobileMenu.classList.add('hidden')));
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (navbar) {
+                navbar.classList.toggle('navbar-scrolled', window.scrollY > 50);
             }
+        });
 
-            // 深色模式
-            const toggleDark=()=>{
-                let isDark=!document.documentElement.classList.contains('dark');
-                document.documentElement.classList.toggle('dark',isDark);
-                ['darkModeIcon','darkModeIconMobile'].forEach(id=>{
-                    let el=document.getElementById(id);
-                    if(el) el.className=isDark?'fas fa-sun text-primary text-lg':'fas fa-moon text-primary text-lg';
-                });
-                localStorage.setItem('darkMode',isDark);
-            };
-            const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
-            let isDark=localStorage.getItem('darkMode')==='true'||(localStorage.getItem('darkMode')===null&&prefersDark);
-            document.documentElement.classList.toggle('dark',isDark);
-            ['darkModeIcon','darkModeIconMobile'].forEach(id=>{
-                let el=document.getElementById(id);
-                if(el) el.className=isDark?'fas fa-sun text-primary text-lg':'fas fa-moon text-primary text-lg';
+        // 移动端菜单
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.onclick = () => mobileMenu.classList.toggle('hidden');
+            mobileMenu.querySelectorAll('a').forEach(l => l.addEventListener('click', () => mobileMenu.classList.add('hidden')));
+        }
+
+        // 深色模式
+        const toggleDark = () => {
+            const isDark = !document.documentElement.classList.contains('dark');
+            document.documentElement.classList.toggle('dark', isDark);
+            ['darkModeIcon', 'darkModeIconMobile'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.className = isDark ? 'fas fa-sun text-primary text-lg' : 'fas fa-moon text-primary text-lg';
             });
-            document.getElementById('darkModeToggle')?.addEventListener('click',toggleDark);
-            document.getElementById('darkModeToggleMobile')?.addEventListener('click',toggleDark);
+            localStorage.setItem('darkMode', isDark);
+        };
+        
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedDark = localStorage.getItem('darkMode');
+        const isDark = savedDark === 'true' || (savedDark === null && prefersDark);
+        document.documentElement.classList.toggle('dark', isDark);
+        ['darkModeIcon', 'darkModeIconMobile'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.className = isDark ? 'fas fa-sun text-primary text-lg' : 'fas fa-moon text-primary text-lg';
+        });
+        
+        document.getElementById('darkModeToggle')?.addEventListener('click', toggleDark);
+        document.getElementById('darkModeToggleMobile')?.addEventListener('click', toggleDark);
 
-            // 轮播
-            let currentSlide=0; const totalSlides=4;
-            const track=document.getElementById('carouselTrack'), dots=document.querySelectorAll('.carousel-dot');
-            let autoPlay;
-            function updateCarousel(){
-                if(track) track.style.transform=`translateX(-${currentSlide*100}%)`;
-                dots.forEach((d,i)=>{
-                    d.classList.toggle('active',i===currentSlide);
-                    d.classList.toggle('bg-primary',i===currentSlide);
-                    d.classList.toggle('bg-gray-400',i!==currentSlide);
-                });
+        // 轮播 - 自动轮播
+        let currentSlide = 0;
+        const totalSlides = 4;
+        const track = document.getElementById('carouselTrack');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let autoPlayInterval;
+        
+        function updateCarousel() {
+            if (track) track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((d, i) => {
+                d.classList.toggle('active', i === currentSlide);
+            });
+        }
+        
+        window.goToSlide = function(i) {
+            if (i >= 0 && i < totalSlides) {
+                currentSlide = i;
+                updateCarousel();
+                resetAutoPlay();
             }
-            window.goToSlide=function(i){ if(i>=0&&i<totalSlides){ currentSlide=i; updateCarousel(); resetAuto(); } };
-            function nextSlide(){ currentSlide=(currentSlide+1)%totalSlides; updateCarousel(); }
-            function prevSlide(){ currentSlide=(currentSlide-1+totalSlides)%totalSlides; updateCarousel(); }
-            function resetAuto(){ clearInterval(autoPlay); autoPlay=setInterval(nextSlide,4500); }
-
-            document.addEventListener('DOMContentLoaded',()=>{
-                document.getElementById('carouselPrev')?.addEventListener('click',()=>{ prevSlide(); resetAuto(); });
-                document.getElementById('carouselNext')?.addEventListener('click',()=>{ nextSlide(); resetAuto(); });
-                updateCarousel(); resetAuto();
+        };
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+        
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(nextSlide, 4000);
+        }
+        
+        function resetAutoPlay() {
+            clearInterval(autoPlayInterval);
+            startAutoPlay();
+        }
+        
+        document.getElementById('carouselPrev')?.addEventListener('click', () => {
+            prevSlide();
+            resetAutoPlay();
+        });
+        
+        document.getElementById('carouselNext')?.addEventListener('click', () => {
+            nextSlide();
+            resetAutoPlay();
+        });
+        
+        const carousel = document.querySelector('.carousel-container');
+        if (carousel) {
+            carousel.addEventListener('mouseenter', () => {
+                clearInterval(autoPlayInterval);
             });
+            carousel.addEventListener('mouseleave', () => {
+                startAutoPlay();
+            });
+        }
+        
+        updateCarousel();
+        startAutoPlay();
 
-            // 滚动触发 fade-section 可见 (增强版)
-            const fadeSections = document.querySelectorAll('.fade-section');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.15, rootMargin: '0px' });
+        // 鼠标遮罩 - 通用
+        function updateMaskPosition(ev) {
+            const card = ev.currentTarget;
+            const rect = card.getBoundingClientRect();
+            let x = (ev.clientX - rect.left) / rect.width;
+            let y = (ev.clientY - rect.top) / rect.height;
+            x = Math.min(1, Math.max(0, x));
+            y = Math.min(1, Math.max(0, y));
+            card.style.setProperty('--x', x * 100 + '%');
+            card.style.setProperty('--y', y * 100 + '%');
+        }
+        
+        // 整个标题栏遮罩
+        function updateHeroMaskPosition(ev) {
+            const hero = ev.currentTarget;
+            const rect = hero.getBoundingClientRect();
+            let x = (ev.clientX - rect.left) / rect.width;
+            let y = (ev.clientY - rect.top) / rect.height;
+            x = Math.min(1, Math.max(0, x));
+            y = Math.min(1, Math.max(0, y));
+            hero.style.setProperty('--hero-x', x * 100 + '%');
+            hero.style.setProperty('--hero-y', y * 100 + '%');
+        }
+        
+        function resetHeroMask(ev) {
+            const hero = ev.currentTarget;
+            hero.style.setProperty('--hero-x', '50%');
+            hero.style.setProperty('--hero-y', '50%');
+        }
+        
+        window.updateMaskPosition = updateMaskPosition;
+        window.updateHeroMaskPosition = updateHeroMaskPosition;
+        window.resetHeroMask = resetHeroMask;
+
+        // 分区切换
+        let currentOpenSection = null;
+        
+        function openSection(section) {
+            const sectionElement = document.getElementById(section + 'Section');
+            const overlay = document.getElementById('pageOverlay');
+            const backButtonContainer = document.getElementById('navBackButtonContainer');
             
-            fadeSections.forEach(section => observer.observe(section));
+            if (sectionElement) {
+                currentOpenSection = section;
+                if (backButtonContainer) backButtonContainer.style.display = 'block';
+                sectionElement.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeSection(section) {
+            const sectionElement = document.getElementById(section + 'Section');
+            const overlay = document.getElementById('pageOverlay');
+            const backButtonContainer = document.getElementById('navBackButtonContainer');
             
-            // 预检查一次可见性
-            setTimeout(() => {
-                fadeSections.forEach(section => {
-                    const rect = section.getBoundingClientRect();
-                    if (rect.top < window.innerHeight - 100) {
-                        section.classList.add('visible');
-                    }
-                });
-            }, 100);
-        })();
+            if (sectionElement) {
+                if (backButtonContainer) backButtonContainer.style.display = 'none';
+                sectionElement.classList.remove('active');
+                overlay.classList.remove('active');
+                currentOpenSection = null;
+                document.body.style.overflow = '';
+            }
+        }
+        
+        function closeCurrentSection() {
+            if (currentOpenSection) closeSection(currentOpenSection);
+        }
+        
+        function closeAllSections() {
+            if (currentOpenSection) closeSection(currentOpenSection);
+        }
+        
+        window.openSection = openSection;
+        window.closeSection = closeSection;
+        window.closeCurrentSection = closeCurrentSection;
+        window.closeAllSections = closeAllSections;
     </script>
 </body>
-</html>在了解我们下方新增三个按钮：工具分区、游戏分区和其他分区（其他代码不改）
+</html>
