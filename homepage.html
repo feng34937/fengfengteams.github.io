@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>凤峰团队</title>
+    <title>凤峰团队 · 成员风采</title>
     <!-- Tailwind + Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -275,7 +275,7 @@
             background-color: #f87171;
         }
 
-        /* 卡片悬浮 - 优化动画，深色模式阴影已调浅 */
+        /* ===== 卡片悬浮 - 所有卡片统一 ===== */
         .card-hover {
             transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             will-change: transform, box-shadow;
@@ -375,22 +375,7 @@
             display: inline-block;
             position: relative;
             overflow: hidden;
-        }
-        .btn-primary::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .btn-primary:hover::after {
-            width: 300px;
-            height: 300px;
+            cursor: pointer;
         }
         .btn-primary:hover {
             background-color: #6b0000;
@@ -415,6 +400,7 @@
             display: inline-block;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         .btn-outline:hover {
             background-color: rgba(139,0,0,0.05);
@@ -589,7 +575,6 @@
             color: #f87171;
             border-color: rgba(248, 113, 113, 0.3);
         }
-        
         .nav-back-button:hover {
             background: #8B0000;
             color: white;
@@ -730,8 +715,9 @@
         .footer-link {
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
         }
-        
         .footer-link:hover {
             color: #8B0000 !important;
             transform: translateX(5px);
@@ -741,7 +727,7 @@
             color: #f87171 !important;
         }
 
-        /* 特别鸣谢模块样式 */
+        /* ===== 特别鸣谢模块 - 全局靠近效果 ===== */
         .thanks-section {
             max-width: 800px;
             margin: 60px auto 0;
@@ -749,10 +735,45 @@
             background: linear-gradient(135deg, rgba(139,0,0,0.03) 0%, rgba(139,0,0,0.08) 100%);
             border-radius: 8px;
             text-align: center;
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
         
-        .dark .thanks-section {
-            background: linear-gradient(135deg, rgba(248,113,113,0.03) 0%, rgba(248,113,113,0.08) 100%);
+        .thanks-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at var(--thanks-x, 50%) var(--thanks-y, 50%), 
+                rgba(139, 0, 0, 0.15) 0%,
+                rgba(139, 0, 0, 0.03) 50%,
+                transparent 80%
+            );
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+            border-radius: inherit;
+        }
+        
+        .dark .thanks-section::before {
+            background: radial-gradient(
+                circle at var(--thanks-x, 50%) var(--thanks-y, 50%), 
+                rgba(248, 113, 113, 0.2) 0%,
+                rgba(248, 113, 113, 0.05) 50%,
+                transparent 80%
+            );
+        }
+        
+        .thanks-section:hover::before {
+            opacity: 1;
+        }
+        
+        .thanks-section > * {
+            position: relative;
+            z-index: 2;
         }
         
         .thanks-title {
@@ -780,7 +801,12 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            transition: transform 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
         }
         
         .thanks-item:hover {
@@ -790,6 +816,13 @@
         .thanks-icon {
             font-size: 3.5rem;
             color: #8B0000;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 3;
+        }
+        
+        .thanks-item:hover .thanks-icon {
+            transform: scale(1.1);
         }
         
         .dark .thanks-icon {
@@ -800,6 +833,8 @@
             font-size: 1.1rem;
             font-weight: 500;
             color: #4a5568;
+            position: relative;
+            z-index: 3;
         }
         
         .dark .thanks-name {
@@ -925,7 +960,7 @@
             <div class="container mx-auto px-5 md:px-10">
                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-20 animate-fadeUp">关于凤峰团队</h2>
 
-                <!-- 轮播 - 自动轮播，深色模式按钮已修复为浅红色 -->
+                <!-- 轮播 - 自动轮播，卡片只有靠近效果 -->
                 <div class="max-w-5xl mx-auto mb-32">
                     <div class="text-center mb-12">
                         <span class="text-primary font-bold text-sm tracking-widest uppercase">LATEST</span>
@@ -1006,7 +1041,7 @@
             </div>
         </section>
 
-        <!-- 核心团队 -->
+        <!-- 核心团队 - 所有卡片只有靠近效果 -->
         <section id="team" class="py-24 md:py-32 bg-secondary">
             <div class="container mx-auto px-5 md:px-10">
                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">核心团队</h2>
@@ -1075,24 +1110,24 @@
                     </div>
                 </div>
 
-                <!-- 特别鸣谢模块 -->
-                <div class="thanks-section">
+                <!-- 特别鸣谢模块 - 全局靠近效果 -->
+                <div class="thanks-section" onmousemove="updateThanksMaskPosition(event)" onmouseleave="resetThanksMask(event)">
                     <h3 class="thanks-title">特别鸣谢</h3>
                     <p class="text-gray-600 dark:text-gray-400 mb-6">感谢以下平台对凤峰团队的支持与帮助</p>
                     <div class="thanks-grid">
-                        <div class="thanks-item">
+                        <div class="thanks-item" onclick="window.open('https://github.com', '_blank')">
                             <i class="fab fa-github thanks-icon"></i>
                             <span class="thanks-name">GitHub</span>
                         </div>
-                        <div class="thanks-item">
+                        <div class="thanks-item" onclick="window.open('https://www.microsoft.com', '_blank')">
                             <i class="fab fa-microsoft thanks-icon"></i>
                             <span class="thanks-name">Microsoft</span>
                         </div>
-                        <div class="thanks-item">
+                        <div class="thanks-item" onclick="window.open('https://www.deepseek.com', '_blank')">
                             <i class="fas fa-brain thanks-icon"></i>
                             <span class="thanks-name">DeepSeek</span>
                         </div>
-                        <div class="thanks-item">
+                        <div class="thanks-item" onclick="window.open('https://www.wps.cn', '_blank')">
                             <i class="fas fa-file-alt thanks-icon"></i>
                             <span class="thanks-name">金山办公</span>
                         </div>
@@ -1106,7 +1141,7 @@
             <div class="container mx-auto px-5 md:px-10">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
                     <div><h3 class="text-2xl font-bold mb-4 text-primary">凤峰团队</h3><p class="text-gray-300 leading-relaxed text-sm">致力于实用的工具和有趣的小游戏，带来便捷和欢乐。</p></div>
-                    <div><h3 class="text-lg font-bold mb-4">快速链接</h3><ul class="space-y-2 text-sm text-gray-300"><li><a href="#home" class="hover:text-primary transition hover:translate-x-1 inline-block">首页</a></li><li><a href="#about" class="hover:text-primary transition hover:translate-x-1 inline-block">关于我们</a></li><li><a href="#team" class="hover:text-primary transition hover:translate-x-1 inline-block">团队成员</a></li><li><a href="#contact" class="hover:text-primary transition hover:translate-x-1 inline-block">联系我们</a></li></ul></div>
+                    <div><h3 class="text-lg font-bold mb-4">快速链接</h3><ul class="space-y-2 text-sm text-gray-300"><li><a href="#home" class="hover:text-primary transition hover:translate-x-1 inline-block footer-link">首页</a></li><li><a href="#about" class="hover:text-primary transition hover:translate-x-1 inline-block footer-link">关于我们</a></li><li><a href="#team" class="hover:text-primary transition hover:translate-x-1 inline-block footer-link">团队成员</a></li><li><a href="#contact" class="hover:text-primary transition hover:translate-x-1 inline-block footer-link">联系我们</a></li></ul></div>
                     <!-- 产品系列 - 改为三个分区链接，点击效果与按钮相同 -->
                     <div><h3 class="text-lg font-bold mb-4">产品系列</h3><ul class="space-y-2 text-sm text-gray-300">
                         <li><a class="footer-link hover:text-primary transition inline-block" onclick="openSection('tools')">工具分区</a></li>
@@ -1118,9 +1153,9 @@
                 <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-xs">
                     <p>&copy; 2026 凤峰团队 · 保留所有权利</p>
                     <div class="flex space-x-4 mt-3 md:mt-0">
-                        <a href="https://sway.office.com/s/pN9w3GwXo0MHuX7C/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block">隐私政策</a>
+                        <a href="https://sway.office.com/s/pN9w3GwXo0MHuX7C/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block footer-link">隐私政策</a>
                         <span>|</span>
-                        <a href="https://sway.office.com/s/OOMZpzkY5Ksrff2q/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block">用户协议</a>
+                        <a href="https://sway.office.com/s/OOMZpzkY5Ksrff2q/embed" target="_blank" class="hover:text-primary transition hover:scale-105 inline-block footer-link">用户协议</a>
                     </div>
                 </div>
             </div>
@@ -1335,9 +1370,29 @@
             hero.style.setProperty('--hero-y', '50%');
         }
         
+        // 特别鸣谢全局遮罩
+        function updateThanksMaskPosition(ev) {
+            const thanks = ev.currentTarget;
+            const rect = thanks.getBoundingClientRect();
+            let x = (ev.clientX - rect.left) / rect.width;
+            let y = (ev.clientY - rect.top) / rect.height;
+            x = Math.min(1, Math.max(0, x));
+            y = Math.min(1, Math.max(0, y));
+            thanks.style.setProperty('--thanks-x', x * 100 + '%');
+            thanks.style.setProperty('--thanks-y', y * 100 + '%');
+        }
+        
+        function resetThanksMask(ev) {
+            const thanks = ev.currentTarget;
+            thanks.style.setProperty('--thanks-x', '50%');
+            thanks.style.setProperty('--thanks-y', '50%');
+        }
+        
         window.updateMaskPosition = updateMaskPosition;
         window.updateHeroMaskPosition = updateHeroMaskPosition;
         window.resetHeroMask = resetHeroMask;
+        window.updateThanksMaskPosition = updateThanksMaskPosition;
+        window.resetThanksMask = resetThanksMask;
 
         // 分区切换
         let currentOpenSection = null;
