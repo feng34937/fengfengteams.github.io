@@ -266,7 +266,7 @@
         }
         .deploy-content {
             background: #2d0a0a; border: 4px solid #ffb347; padding: 40px 50px;
-            max-width: 700px; width: 90%; color: #ffb3b3; border-radius: 4px;
+            max-width: 900px; width: 90%; color: #ffb3b3; border-radius: 4px;
             max-height: 80vh; overflow-y: auto;
             animation: modalPop 0.4s ease;
         }
@@ -335,7 +335,7 @@
             to { opacity: 1; transform: translateX(0); }
         }
         .player-card.active { border-color: #ffd966; box-shadow: 0 0 15px #ffb347; background: #3d1515; transform: scale(1.02); }
-        .player-card.eliminated { opacity: 0.4; filter: grayscale(80%); } /* 被淘汰玩家样式 */
+        .player-card.eliminated { opacity: 0.4; filter: grayscale(80%); }
         .player-name { font-size: 22px; font-weight: bold; color: #ffd966; margin-bottom: 6px; }
         .capital-name { font-size: 18px; color: #ffb3b3; margin-bottom: 8px; font-style: italic; border-bottom: 1px dashed #8b1a1a; padding-bottom: 4px; }
         .resource-display { display: flex; flex-wrap: wrap; gap: 8px; background: #1f0606; padding: 8px; font-size: 15px; border-radius: 4px; }
@@ -433,7 +433,7 @@
             background: rgba(45,10,10,0.9); z-index: 1500; align-items: center; justify-content: center;
             animation: modalBackdropFade 0.3s ease;
         }
-        .modal-content { background: #2d0a0a; padding: 30px; max-width: 800px; width: 90%; color: #ffb3b3; border: 3px solid #8b1a1a; max-height: 80vh; overflow-y: auto; border-radius: 4px; animation: modalPop 0.4s ease; }
+        .modal-content { background: #2d0a0a; padding: 30px; max-width: 1000px; width: 90%; color: #ffb3b3; border: 3px solid #8b1a1a; max-height: 80vh; overflow-y: auto; border-radius: 4px; animation: modalPop 0.4s ease; }
         .loan-item, .research-item {
             margin: 20px 0; padding: 20px; border: 1px solid #8b1a1a; display: flex; justify-content: space-between; align-items: center; font-size: 22px; flex-wrap: wrap;
             border-radius: 4px;
@@ -565,78 +565,230 @@
                 <li>2. 每回合可 部署/移动/收集/扩张/攻击 (仅1次攻击)。扩张可至海上 (100银币)。</li>
                 <li>3. 长按格子查看信息。胜利条件：最后存活/攻占所有首都。</li>
                 <li>4. 每个格子只能收集一次资源。部分陆地格子有铀资源。</li>
-                <li>5. 海军(船/巡洋舰/航母)只能部署在海上，且永远不能登陆。</li>
-                <li>6. 导弹/核弹有爆炸范围：短程1格，中程2格，洲际3格，原子弹2格，氢弹3格。攻击时波及范围内所有单位与领土。</li>
-                <li>7. 研发的武器只能由研发者使用，且只能部署一次（消耗品）。</li>
-                <li>8. 首都首次被攻占时，该国家立即灭亡，其所有领土和单位消失。</li>
+                <li>5. 海军(船/巡洋舰/航母/潜艇/驱逐舰等)只能部署在海上，且永远不能登陆。</li>
+                <li>6. 空军(战斗机/轰炸机/预警机)可部署于陆地或航母上，移动无视地形。</li>
+                <li>7. 导弹/核弹/电磁炮/卫星武器有爆炸范围，攻击时波及范围内所有单位与领土。</li>
+                <li>8. 研发的武器只能由研发者使用，且只能部署一次（消耗品）。</li>
+                <li>9. 首都首次被攻占时，该国家立即灭亡，其所有领土和单位消失。</li>
             </ul>
             <button class="close-rules-btn" id="closeRulesBtn">知道了</button>
         </div>
     </div>
 
-    <!-- 研发弹窗 (科技树) -->
+    <!-- 研发弹窗 (科技树) - 超多武器 -->
     <div class="modal" id="researchModal">
         <div class="modal-content">
-            <div class="modal-header"><h2 style="font-size:32px;">🔬 科技研发</h2><span class="close-btn" id="closeResearchBtn">&times;</span></div>
+            <div class="modal-header"><h2 style="font-size:32px;">🔬 科技研发 (海量武器)</h2><span class="close-btn" id="closeResearchBtn">&times;</span></div>
             <div class="tech-tree">
-                <!-- 地面单位 -->
+                <!-- 基础步兵 -->
                 <div class="tech-category">
-                    <h3>🚀 地面单位 (部署于陆地)</h3>
+                    <h3>👣 基础单位</h3>
                     <div class="loan-item">
-                        <div><span>坦克</span><span class="tech-note">(攻击单位)</span></div>
-                        <button class="buy-btn research-buy" data-tech="tank" data-cost-silver="200" data-cost-rare="5">研发 (200银,5稀土)</button>
-                    </div>
-                    <div class="loan-item">
-                        <div><span>30万士兵</span><span class="tech-note">(精锐步兵)</span></div>
-                        <button class="buy-btn research-buy" data-tech="30w" data-cost-silver="300" data-cost-gold="2">研发 (300银,2金)</button>
+                        <div><span>步枪兵</span><span class="tech-note">(基础步兵)</span></div>
+                        <button class="buy-btn research-buy disabled" disabled>免费</button>
                     </div>
                 </div>
-                <!-- 海军单位 -->
+                
+                <!-- 地面单位 (新) -->
                 <div class="tech-category">
-                    <h3>⚓ 海军单位 (部署于海洋，永不上陆)</h3>
+                    <h3>🚀 地面部队 (部署于陆地)</h3>
                     <div class="loan-item">
-                        <div><span>运输船</span><span class="tech-note">(运输单位)</span></div>
-                        <button class="buy-btn research-buy" data-tech="ship" data-cost-silver="150" data-cost-oil="10">研发 (150银,10石油)</button>
+                        <div><span>轻型坦克</span><span class="tech-note">(快速单位)</span></div>
+                        <button class="buy-btn research-buy" data-tech="lightTank" data-cost-silver="150" data-cost-rare="3">研发 (150银,3稀土)</button>
                     </div>
                     <div class="loan-item">
-                        <div><span>巡洋舰</span><span class="tech-note">(攻击单位)</span></div>
-                        <button class="buy-btn research-buy" data-tech="cruiser" data-cost-silver="250" data-cost-oil="20" data-cost-rare="2">研发 (250银,20石油,2稀土)</button>
+                        <div><span>主战坦克</span><span class="tech-note">(重装甲)</span></div>
+                        <button class="buy-btn research-buy" data-tech="heavyTank" data-cost-silver="300" data-cost-rare="8" data-cost-oil="10">研发 (300银,8稀土,10石油)</button>
                     </div>
                     <div class="loan-item">
-                        <div><span>航空母舰</span><span class="tech-note">(运输单位)</span></div>
-                        <button class="buy-btn research-buy" data-tech="carrier" data-cost-silver="500" data-cost-oil="40" data-cost-diamond="1">研发 (500银,40石油,1钻石)</button>
+                        <div><span>自行火炮</span><span class="tech-note">(远程炮击)</span></div>
+                        <button class="buy-btn research-buy" data-tech="artillery" data-cost-silver="250" data-cost-rare="6" data-cost-oil="15">研发 (250银,6稀土,15石油)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>防空导弹车</span><span class="tech-note">(对空)</span></div>
+                        <button class="buy-btn research-buy" data-tech="aaMissile" data-cost-silver="280" data-cost-rare="7" data-cost-oil="12">研发 (280银,7稀土,12石油)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>步兵战车</span><span class="tech-note">(运兵/支援)</span></div>
+                        <button class="buy-btn research-buy" data-tech="ifv" data-cost-silver="200" data-cost-rare="4" data-cost-oil="8">研发 (200银,4稀土,8石油)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>火箭炮</span><span class="tech-note">(范围1)</span></div>
+                        <button class="buy-btn research-buy" data-tech="rocket" data-cost-silver="350" data-cost-rare="10" data-cost-oil="20" data-cost-gold="1">研发 (350银,10稀土,20石油,1金)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>电磁坦克</span><span class="tech-note">(高科技)</span></div>
+                        <button class="buy-btn research-buy" data-tech="empTank" data-cost-silver="500" data-cost-rare="15" data-cost-oil="25" data-cost-diamond="1">研发 (500银,15稀土,25石油,1钻)</button>
                     </div>
                 </div>
+
+                <!-- 空军单位 (新) - 可部署陆地/航母 -->
+                <div class="tech-category">
+                    <h3>✈️ 空军 (部署陆地/航母，无视地形移动)</h3>
+                    <div class="loan-item">
+                        <div><span>螺旋桨战机</span><span class="tech-note">(早期)</span></div>
+                        <button class="buy-btn research-buy" data-tech="propFighter" data-cost-silver="180" data-cost-oil="15">研发 (180银,15石油)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>喷气式战斗机</span><span class="tech-note">(制空)</span></div>
+                        <button class="buy-btn research-buy" data-tech="jetFighter" data-cost-silver="320" data-cost-oil="25" data-cost-rare="5">研发 (320银,25石油,5稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>战斗轰炸机</span><span class="tech-note">(对地)</span></div>
+                        <button class="buy-btn research-buy" data-tech="fighterBomber" data-cost-silver="380" data-cost-oil="30" data-cost-rare="8">研发 (380银,30石油,8稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>战略轰炸机</span><span class="tech-note">(范围2)</span></div>
+                        <button class="buy-btn research-buy" data-tech="bomber" data-cost-silver="600" data-cost-oil="50" data-cost-rare="12" data-cost-gold="2">研发 (600银,50石油,12稀土,2金)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>隐形轰炸机</span><span class="tech-note">(范围2)</span></div>
+                        <button class="buy-btn research-buy" data-tech="stealthBomber" data-cost-silver="800" data-cost-oil="60" data-cost-rare="20" data-cost-diamond="2">研发 (800银,60石油,20稀土,2钻)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>无人机</span><span class="tech-note">(侦察)</span></div>
+                        <button class="buy-btn research-buy" data-tech="drone" data-cost-silver="220" data-cost-oil="18" data-cost-rare="3">研发 (220银,18石油,3稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>预警机</span><span class="tech-note">(视野+1)</span></div>
+                        <button class="buy-btn research-buy" data-tech="awacs" data-cost-silver="450" data-cost-oil="35" data-cost-rare="10">研发 (450银,35石油,10稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>垂直起降战机</span><span class="tech-note">(可舰载)</span></div>
+                        <button class="buy-btn research-buy" data-tech="vtol" data-cost-silver="420" data-cost-oil="30" data-cost-rare="9" data-cost-gold="1">研发 (420银,30石油,9稀土,1金)</button>
+                    </div>
+                </div>
+
+                <!-- 海军单位 (扩充) -->
+                <div class="tech-category">
+                    <h3>⚓ 海军 (仅部署海洋，永不上陆)</h3>
+                    <div class="loan-item">
+                        <div><span>巡逻艇</span><span class="tech-note">(快速)</span></div>
+                        <button class="buy-btn research-buy" data-tech="patrolBoat" data-cost-silver="120" data-cost-oil="8">研发 (120银,8石油)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>导弹快艇</span><span class="tech-note">(对舰)</span></div>
+                        <button class="buy-btn research-buy" data-tech="missileBoat" data-cost-silver="200" data-cost-oil="15" data-cost-rare="4">研发 (200银,15石油,4稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>驱逐舰</span><span class="tech-note">(多用途)</span></div>
+                        <button class="buy-btn research-buy" data-tech="destroyer" data-cost-silver="350" data-cost-oil="28" data-cost-rare="8">研发 (350银,28石油,8稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>护卫舰</span><span class="tech-note">(反潜)</span></div>
+                        <button class="buy-btn research-buy" data-tech="frigate" data-cost-silver="300" data-cost-oil="24" data-cost-rare="6">研发 (300银,24石油,6稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>潜艇</span><span class="tech-note">(隐形)</span></div>
+                        <button class="buy-btn research-buy" data-tech="submarine" data-cost-silver="400" data-cost-oil="35" data-cost-rare="10" data-cost-uranium="1">研发 (400银,35石油,10稀土,1铀)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>核潜艇</span><span class="tech-note">(范围2)</span></div>
+                        <button class="buy-btn research-buy" data-tech="nukeSub" data-cost-silver="700" data-cost-oil="50" data-cost-rare="18" data-cost-uranium="3" data-cost-gold="2" data-prerequisite="submarine">研发 (700银,50石油,18稀土,3铀,2金)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>两栖攻击舰</span><span class="tech-note">(运输)</span></div>
+                        <button class="buy-btn research-buy" data-tech="amphibious" data-cost-silver="480" data-cost-oil="40" data-cost-rare="12" data-cost-diamond="1">研发 (480银,40石油,12稀土,1钻)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>战列舰</span><span class="tech-note">(重炮)</span></div>
+                        <button class="buy-btn research-buy" data-tech="battleship" data-cost-silver="650" data-cost-oil="55" data-cost-rare="20" data-cost-gold="3">研发 (650银,55石油,20稀土,3金)</button>
+                    </div>
+                </div>
+
                 <!-- 导弹系统 (可升级) 带范围 -->
                 <div class="tech-category">
-                    <h3>🚀 导弹系统 (可升级，部署于陆地/海洋)</h3>
+                    <h3>🚀 导弹系统 (范围递增)</h3>
                     <div class="loan-item">
-                        <div><span>短程导弹</span><span class="tech-note">(攻击范围1格)</span></div>
+                        <div><span>短程导弹</span><span class="tech-note">(范围1)</span></div>
                         <button class="buy-btn research-buy" data-tech="missileShort" data-cost-silver="300" data-cost-rare="10" data-cost-oil="15">研发 (300银,10稀土,15石油)</button>
                     </div>
                     <div class="loan-item">
-                        <div><span>中程导弹</span><span class="tech-note">(攻击范围2格，需短程)</span></div>
+                        <div><span>中程导弹</span><span class="tech-note">(范围2)</span></div>
                         <button class="buy-btn research-buy" data-tech="missileMedium" data-cost-silver="500" data-cost-rare="20" data-cost-oil="25" data-cost-gold="2" data-prerequisite="missileShort">研发 (500银,20稀土,25石油,2金)</button>
                     </div>
                     <div class="loan-item">
-                        <div><span>洲际导弹</span><span class="tech-note">(攻击范围3格，需中程)</span></div>
-                        <button class="buy-btn research-buy" data-tech="missileLong" data-cost-silver="800" data-cost-rare="30" data-cost-oil="40" data-cost-gold="5" data-cost-diamond="2" data-prerequisite="missileMedium">研发 (800银,30稀土,40石油,5金,2钻石)</button>
+                        <div><span>洲际导弹</span><span class="tech-note">(范围3)</span></div>
+                        <button class="buy-btn research-buy" data-tech="missileLong" data-cost-silver="800" data-cost-rare="30" data-cost-oil="40" data-cost-gold="5" data-cost-diamond="2" data-prerequisite="missileMedium">研发 (800银,30稀土,40石油,5金,2钻)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>高超音速导弹</span><span class="tech-note">(范围3, 无视拦截)</span></div>
+                        <button class="buy-btn research-buy" data-tech="hypersonic" data-cost-silver="1200" data-cost-rare="40" data-cost-oil="50" data-cost-gold="8" data-cost-diamond="3" data-prerequisite="missileLong">研发 (1200银,40稀土,50石油,8金,3钻)</button>
                     </div>
                 </div>
+
                 <!-- 核科技树 带范围 -->
                 <div class="tech-category">
-                    <h3>☢️ 核计划 (部署于陆地/海洋)</h3>
+                    <h3>☢️ 核武器 (大范围)</h3>
                     <div class="loan-item">
-                        <div><span>核基础设施</span><span class="tech-note">(前置条件)</span></div>
+                        <div><span>核基础设施</span><span class="tech-note">(前置)</span></div>
                         <button class="buy-btn research-buy" data-tech="nukeInfra" data-cost-silver="500" data-cost-rare="20" data-cost-gold="5">研发 (500银,20稀土,5金)</button>
                     </div>
                     <div class="loan-item">
-                        <div><span>原子弹</span><span class="tech-note">(攻击范围2格，需基础设施)</span></div>
+                        <div><span>原子弹</span><span class="tech-note">(范围2)</span></div>
                         <button class="buy-btn research-buy" data-tech="nuke" data-cost-silver="800" data-cost-rare="30" data-cost-uranium="2" data-prerequisite="nukeInfra">研发 (800银,30稀土,2铀)</button>
                     </div>
                     <div class="loan-item">
-                        <div><span>氢弹</span><span class="tech-note">(攻击范围3格，需原子弹)</span></div>
+                        <div><span>氢弹</span><span class="tech-note">(范围3)</span></div>
                         <button class="buy-btn research-buy" data-tech="hbomb" data-cost-silver="1500" data-cost-rare="50" data-cost-uranium="5" data-prerequisite="nuke">研发 (1500银,50稀土,5铀)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>中子弹</span><span class="tech-note">(范围2, 只杀单位)</span></div>
+                        <button class="buy-btn research-buy" data-tech="neutronBomb" data-cost-silver="1200" data-cost-rare="40" data-cost-uranium="3" data-cost-gold="4" data-prerequisite="nuke">研发 (1200银,40稀土,3铀,4金)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>钴弹</span><span class="tech-note">(范围3, 污染)</span></div>
+                        <button class="buy-btn research-buy" data-tech="cobaltBomb" data-cost-silver="2000" data-cost-rare="70" data-cost-uranium="8" data-cost-diamond="3" data-prerequisite="hbomb">研发 (2000银,70稀土,8铀,3钻)</button>
+                    </div>
+                </div>
+
+                <!-- 未来科技 -->
+                <div class="tech-category">
+                    <h3>🔮 未来武器</h3>
+                    <div class="loan-item">
+                        <div><span>电磁炮</span><span class="tech-note">(范围2, 直线)</span></div>
+                        <button class="buy-btn research-buy" data-tech="railgun" data-cost-silver="1000" data-cost-rare="50" data-cost-oil="30" data-cost-diamond="5" data-cost-gold="10">研发 (1000银,50稀土,30石油,5钻,10金)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>激光武器</span><span class="tech-note">(单格, 必中)</span></div>
+                        <button class="buy-btn research-buy" data-tech="laser" data-cost-silver="900" data-cost-rare="40" data-cost-diamond="4" data-cost-gold="8">研发 (900银,40稀土,4钻,8金)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>粒子炮</span><span class="tech-note">(范围2)</span></div>
+                        <button class="buy-btn research-buy" data-tech="particle" data-cost-silver="1300" data-cost-rare="60" data-cost-diamond="6" data-cost-uranium="4">研发 (1300银,60稀土,6钻,4铀)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>天基动能武器</span><span class="tech-note">(范围3, 卫星)</span></div>
+                        <button class="buy-btn research-buy" data-tech="rodFromGod" data-cost-silver="2500" data-cost-rare="100" data-cost-diamond="10" data-cost-gold="20" data-cost-uranium="10">研发 (2500银,100稀土,10钻,20金,10铀)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>轨道炮</span><span class="tech-note">(范围3)</span></div>
+                        <button class="buy-btn research-buy" data-tech="orbital" data-cost-silver="1800" data-cost-rare="80" data-cost-diamond="8" data-cost-gold="15" data-cost-uranium="6">研发 (1800银,80稀土,8钻,15金,6铀)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>纳米机器人</span><span class="tech-note">(吞噬单位)</span></div>
+                        <button class="buy-btn research-buy" data-tech="nano" data-cost-silver="1600" data-cost-rare="90" data-cost-diamond="12" data-cost-gold="12">研发 (1600银,90稀土,12钻,12金)</button>
+                    </div>
+                </div>
+
+                <!-- 特殊单位 -->
+                <div class="tech-category">
+                    <h3>🎯 特殊单位</h3>
+                    <div class="loan-item">
+                        <div><span>雷达站</span><span class="tech-note">(视野+2)</span></div>
+                        <button class="buy-btn research-buy" data-tech="radar" data-cost-silver="250" data-cost-rare="8" data-cost-oil="10">研发 (250银,8稀土,10石油)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>干扰器</span><span class="tech-note">(使附近单位无法攻击)</span></div>
+                        <button class="buy-btn research-buy" data-tech="jammer" data-cost-silver="400" data-cost-rare="15" data-cost-oil="20" data-cost-gold="2">研发 (400银,15稀土,20石油,2金)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>医疗兵</span><span class="tech-note">(无攻击力)</span></div>
+                        <button class="buy-btn research-buy" data-tech="medic" data-cost-silver="100" data-cost-rare="2">研发 (100银,2稀土)</button>
+                    </div>
+                    <div class="loan-item">
+                        <div><span>间谍</span><span class="tech-note">(可潜入)</span></div>
+                        <button class="buy-btn research-buy" data-tech="spy" data-cost-silver="200" data-cost-gold="1">研发 (200银,1金)</button>
                     </div>
                 </div>
             </div>
@@ -703,7 +855,7 @@
                 <button class="action-btn" id="endTurnBtn" disabled>结束回合</button>
             </div>
             <div class="status-text" id="statusText">请先完成大厅设置</div>
-            <div class="data-info">⚔️ 长按格子查看 | 首都陷落即灭国 | 每回合1次攻击 | 武器消耗品 | 船永不上陆 | 铀资源</div>
+            <div class="data-info">⚔️ 长按格子查看 | 首都陷落即灭国 | 每回合1次攻击 | 武器消耗品 | 50+种单位</div>
         </div>
     </div>
 
@@ -738,20 +890,57 @@
                 globalTurnCounter: 0,
                 harvestedCells: new Set(), // 记录已收集资源的格子
                 eliminatedPlayers: new Set(), // 被淘汰的玩家
-                // 研发完成的技术 - 记录每个玩家研发的武器
+                // 研发完成的技术 - 记录每个玩家研发的武器 (超多武器)
                 researched: {
-                    // 每个武器类型记录哪些玩家研发了 (用Set存储玩家ID)
-                    tank: new Set(),
-                    '30w': new Set(),
-                    ship: new Set(),
-                    cruiser: new Set(),
-                    carrier: new Set(),
+                    // 地面
+                    lightTank: new Set(),
+                    heavyTank: new Set(),
+                    artillery: new Set(),
+                    aaMissile: new Set(),
+                    ifv: new Set(),
+                    rocket: new Set(),
+                    empTank: new Set(),
+                    // 空军
+                    propFighter: new Set(),
+                    jetFighter: new Set(),
+                    fighterBomber: new Set(),
+                    bomber: new Set(),
+                    stealthBomber: new Set(),
+                    drone: new Set(),
+                    awacs: new Set(),
+                    vtol: new Set(),
+                    // 海军
+                    patrolBoat: new Set(),
+                    missileBoat: new Set(),
+                    destroyer: new Set(),
+                    frigate: new Set(),
+                    submarine: new Set(),
+                    nukeSub: new Set(),
+                    amphibious: new Set(),
+                    battleship: new Set(),
+                    // 导弹
                     missileShort: new Set(),
                     missileMedium: new Set(),
                     missileLong: new Set(),
+                    hypersonic: new Set(),
+                    // 核武器
                     nukeInfra: new Set(),
                     nuke: new Set(),
-                    hbomb: new Set()
+                    hbomb: new Set(),
+                    neutronBomb: new Set(),
+                    cobaltBomb: new Set(),
+                    // 未来
+                    railgun: new Set(),
+                    laser: new Set(),
+                    particle: new Set(),
+                    rodFromGod: new Set(),
+                    orbital: new Set(),
+                    nano: new Set(),
+                    // 特殊
+                    radar: new Set(),
+                    jammer: new Set(),
+                    medic: new Set(),
+                    spy: new Set()
                 },
                 // 武器使用次数记录 (每个玩家每种武器只能使用一次)
                 weaponUsed: new Map(), // key: "player_weaponType" 例如 "1_tank"
@@ -761,28 +950,89 @@
                 pendingWeapon: null
             };
 
-            // 定义武器部署地形限制
+            // 定义武器部署地形限制 (简化：空军any，海军sea，陆军land，特殊any)
             const weaponTerrain = {
-                'tank': 'land',        // 坦克只能陆地
-                '30w': 'land',         // 士兵只能陆地
-                'ship': 'sea',         // 运输船只能海洋
-                'cruiser': 'sea',      // 巡洋舰只能海洋
-                'carrier': 'sea',      // 航母只能海洋
-                'missileShort': 'any', // 导弹任意
-                'missileMedium': 'any',
-                'missileLong': 'any',
-                'nuke': 'any',
-                'hbomb': 'any',
-                'infantry': 'land'      // 步兵陆地
+                // 地面 (land)
+                lightTank: 'land',
+                heavyTank: 'land',
+                artillery: 'land',
+                aaMissile: 'land',
+                ifv: 'land',
+                rocket: 'land',
+                empTank: 'land',
+                // 空军 (any - 可部署陆地或航母上)
+                propFighter: 'any',
+                jetFighter: 'any',
+                fighterBomber: 'any',
+                bomber: 'any',
+                stealthBomber: 'any',
+                drone: 'any',
+                awacs: 'any',
+                vtol: 'any',
+                // 海军 (sea)
+                patrolBoat: 'sea',
+                missileBoat: 'sea',
+                destroyer: 'sea',
+                frigate: 'sea',
+                submarine: 'sea',
+                nukeSub: 'sea',
+                amphibious: 'sea',
+                battleship: 'sea',
+                // 导弹 (any)
+                missileShort: 'any',
+                missileMedium: 'any',
+                missileLong: 'any',
+                hypersonic: 'any',
+                // 核武器 (any)
+                nukeInfra: 'land',  // 基础设施只能陆地
+                nuke: 'any',
+                hbomb: 'any',
+                neutronBomb: 'any',
+                cobaltBomb: 'any',
+                // 未来 (any)
+                railgun: 'any',
+                laser: 'any',
+                particle: 'any',
+                rodFromGod: 'any',
+                orbital: 'any',
+                nano: 'any',
+                // 特殊
+                radar: 'land',
+                jammer: 'any',
+                medic: 'land',
+                spy: 'any',
+                // 原有保留
+                infantry: 'land',
+                tank: 'land',
+                '30w': 'land',
+                ship: 'sea',
+                cruiser: 'sea',
+                carrier: 'sea'
             };
 
             // 武器范围定义 (爆炸半径，曼哈顿距离)
             const weaponRange = {
-                'missileShort': 1,
-                'missileMedium': 2,
-                'missileLong': 3,
-                'nuke': 2,
-                'hbomb': 3
+                // 导弹
+                missileShort: 1,
+                missileMedium: 2,
+                missileLong: 3,
+                hypersonic: 3,
+                // 核武器
+                nuke: 2,
+                hbomb: 3,
+                neutronBomb: 2,
+                cobaltBomb: 3,
+                // 未来
+                railgun: 2,
+                particle: 2,
+                rodFromGod: 3,
+                orbital: 3,
+                // 其他有范围的
+                rocket: 1,
+                bomber: 2,
+                stealthBomber: 2,
+                nukeSub: 2,
+                artillery: 1  // 自行火炮范围1
             };
 
             // DOM 元素
@@ -988,7 +1238,7 @@
                     gameState.researched[key] = new Set();
                 }
                 for(let i=1; i<=count; i++) {
-                    gameState.playerResources[i] = { silver:100, gold:2, diamond:1, rareEarth:0, oil:0, uranium:0 };
+                    gameState.playerResources[i] = { silver:200, gold:5, diamond:3, rareEarth:10, oil:20, uranium:2 }; // 初始资源增加
                     gameState.playerLands[i] = { cells: new Set(), capital: null };
                 }
                 gameState.currentTurn = 1;
@@ -1104,7 +1354,7 @@
                 // 清除首都标记
                 gameState.playerLands[playerId].capital = null;
                 
-                // 重置该玩家的资源（可选）
+                // 重置该玩家的资源
                 gameState.playerResources[playerId] = { silver:0, gold:0, diamond:0, rareEarth:0, oil:0, uranium:0 };
                 
                 renderPlayerCards();
@@ -1130,12 +1380,11 @@
                     
                     turnIndicator.textContent = `🔄 当前回合：${gameState.playerNames[gameState.currentTurn]}`;
                     placeUnitBtn.disabled = false; moveUnitBtn.disabled = false; collectBtn.disabled = false; expandLandBtn.disabled = false; 
-                    attackBtn.disabled = gameState.attackUsedThisTurn; // 攻击按钮状态
+                    attackBtn.disabled = gameState.attackUsedThisTurn;
                     endTurnBtn.disabled = false;
                     researchBtn.style.pointerEvents = 'auto'; researchBtn.style.opacity = '1';
                     deployWeaponBtn.style.pointerEvents = 'auto'; deployWeaponBtn.style.opacity = '1';
                     
-                    // 攻击按钮样式
                     if(gameState.attackUsedThisTurn) {
                         attackBtn.classList.add('used');
                     } else {
@@ -1163,13 +1412,11 @@
             function generateBalancedMap() {
                 const size = 20; const total = size*size; const target = Math.floor(total/2);
                 let map = Array(size).fill().map(()=>Array(size).fill(0));
-                // 随机生成陆地海洋
                 for(let y=0; y<size; y++) for(let x=0; x<size; x++) map[y][x] = Math.random()>0.5?1:0;
                 let land = map.flat().filter(v=>v===1).length;
                 while(land > target) { for(let y=0; y<size && land>target; y++) for(let x=0; x<size && land>target; x++) if(map[y][x]===1) { map[y][x]=0; land--; } }
                 while(land < target) { for(let y=0; y<size && land<target; y++) for(let x=0; x<size && land<target; x++) if(map[y][x]===0) { map[y][x]=1; land++; } }
                 
-                // 在陆地上随机放置铀资源 (约10%的陆地格子有铀)
                 const uraniumMap = new Set();
                 const landCells = [];
                 for(let y=0; y<size; y++) {
@@ -1177,7 +1424,7 @@
                         if(map[y][x]===1) landCells.push({x,y});
                     }
                 }
-                const uraniumCount = Math.floor(landCells.length * 0.1);
+                const uraniumCount = Math.floor(landCells.length * 0.15);
                 for(let i=0; i<uraniumCount; i++) {
                     if(landCells.length === 0) break;
                     const idx = Math.floor(Math.random() * landCells.length);
@@ -1192,7 +1439,6 @@
             function generateGrid() {
                 grid.innerHTML = '';
                 const {map, uraniumMap} = generateBalancedMap();
-                // 存储铀资源位置供收集使用
                 window.uraniumResources = uraniumMap;
                 
                 for(let y=0; y<20; y++) {
@@ -1201,8 +1447,6 @@
                         cell.classList.add('grid-cell');
                         cell.dataset.x = x; cell.dataset.y = y;
                         if(map[y][x]===1) cell.classList.add('land'); else cell.classList.add('sea');
-                        
-                        // 标记铀资源（视觉上可以加个标记，但为了简洁先不加）
                         
                         let longPressTimer = null;
                         let longPressTriggered = false;
@@ -1251,22 +1495,23 @@
                     const unit = gameState.units.get(key);
                     const unitNames = {
                         'infantry': '步兵',
-                        'tank': '坦克',
-                        '30w': '30万士兵',
-                        'ship': '运输船',
-                        'cruiser': '巡洋舰',
-                        'carrier': '航空母舰',
-                        'missileShort': '短程导弹',
-                        'missileMedium': '中程导弹',
-                        'missileLong': '洲际导弹',
-                        'nuke': '原子弹',
-                        'hbomb': '氢弹'
+                        'lightTank': '轻型坦克', 'heavyTank': '主战坦克', 'artillery': '自行火炮',
+                        'aaMissile': '防空导弹车', 'ifv': '步兵战车', 'rocket': '火箭炮', 'empTank': '电磁坦克',
+                        'propFighter': '螺旋桨战机', 'jetFighter': '喷气式战斗机', 'fighterBomber': '战斗轰炸机',
+                        'bomber': '战略轰炸机', 'stealthBomber': '隐形轰炸机', 'drone': '无人机', 'awacs': '预警机',
+                        'vtol': '垂直起降战机', 'patrolBoat': '巡逻艇', 'missileBoat': '导弹快艇', 'destroyer': '驱逐舰',
+                        'frigate': '护卫舰', 'submarine': '潜艇', 'nukeSub': '核潜艇', 'amphibious': '两栖攻击舰',
+                        'battleship': '战列舰', 'missileShort': '短程导弹', 'missileMedium': '中程导弹',
+                        'missileLong': '洲际导弹', 'hypersonic': '高超音速导弹', 'nukeInfra': '核基础设施',
+                        'nuke': '原子弹', 'hbomb': '氢弹', 'neutronBomb': '中子弹', 'cobaltBomb': '钴弹',
+                        'railgun': '电磁炮', 'laser': '激光武器', 'particle': '粒子炮', 'rodFromGod': '天基动能武器',
+                        'orbital': '轨道炮', 'nano': '纳米机器人', 'radar': '雷达站', 'jammer': '干扰器',
+                        'medic': '医疗兵', 'spy': '间谍'
                     };
                     weapon = unitNames[unit.type] || unit.type;
                 }
                 cellInfoWeapon.textContent = weapon;
                 cellInfoHarvested.textContent = gameState.harvestedCells.has(key) ? '已耗尽 ❌' : '可收集 ✅';
-                // 显示是否有铀
                 if(window.uraniumResources && window.uraniumResources.has(key) && !gameState.harvestedCells.has(key)) {
                     cellInfoHarvested.textContent += ' (含铀)';
                 }
@@ -1381,7 +1626,6 @@
                 if(e.ctrlKey || e.button===2) { showCellInfo(x,y); return; }
                 if(gameState.setupPhase.isSetting) { handleSetupCellClick(x,y,cell); return; }
                 
-                // 如果当前玩家已被淘汰，不允许操作
                 if(gameState.eliminatedPlayers.has(gameState.currentTurn)) {
                     statusText.textContent = `❌ 你已被淘汰，无法操作`;
                     return;
@@ -1434,9 +1678,9 @@
                 const [ox,oy] = firstKey.split(',').map(Number);
                 const oldCell = document.querySelector(`[data-x="${ox}"][data-y="${oy}"]`);
                 const newCell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                // 移动时检查地形限制：单位类型必须匹配目标地形
                 const unit = gameState.units.get(firstKey);
                 const requiredTerrain = weaponTerrain[unit.type] || 'land';
+                
                 if(requiredTerrain === 'land' && !newCell.classList.contains('land')) {
                     statusText.textContent = `❌ 该单位不能移动到海洋`;
                     return;
@@ -1445,6 +1689,8 @@
                     statusText.textContent = `❌ 该单位不能移动到陆地`;
                     return;
                 }
+                // 空军 (any) 无限制
+                
                 if(gameState.units.has(`${x},${y}`)) return;
                 oldCell.classList.remove('unit');
                 gameState.units.delete(firstKey);
@@ -1465,19 +1711,20 @@
                     return;
                 }
                 
-                let silver = Math.floor(Math.random()*30)+10;
-                let rare = Math.floor(Math.random()*8)+2;
-                let oil = Math.floor(Math.random()*10)+2;
+                let silver = Math.floor(Math.random()*40)+20;
+                let rare = Math.floor(Math.random()*12)+3;
+                let oil = Math.floor(Math.random()*15)+5;
                 let uranium = 0;
                 
-                // 如果有铀资源，额外获得铀
                 if(window.uraniumResources && window.uraniumResources.has(key)) {
-                    uranium = Math.floor(Math.random()*2)+1; // 1-2铀
+                    uranium = Math.floor(Math.random()*3)+1;
                 }
                 
                 if(gameState.units.has(key) && gameState.units.get(key).owner===gameState.currentTurn) {
-                    silver*=2; rare*=2; oil*=2;
-                    if(uranium > 0) uranium *= 2;
+                    silver = Math.floor(silver*1.5);
+                    rare = Math.floor(rare*1.5);
+                    oil = Math.floor(oil*1.5);
+                    if(uranium > 0) uranium = Math.floor(uranium*1.5);
                 }
                 
                 gameState.playerResources[gameState.currentTurn].silver += silver;
@@ -1495,12 +1742,10 @@
 
             function expandLand(x,y) {
                 if(!isMyLand(x,y) && !gameState.playerLands[gameState.currentTurn].cells.has(`${x},${y}`)) { 
-                    // 扩张时目标不是自己的领土，可以
                 } else {
                     statusText.textContent = `❌ 不能扩张到已有领土`; return;
                 }
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
-                // 扩张可以是陆地或海洋
                 const key=`${x},${y}`;
                 for(let i=1;i<=gameState.totalPlayers;i++) {
                     if(!gameState.eliminatedPlayers.has(i) && gameState.playerLands[i].cells.has(key)) { 
@@ -1520,7 +1765,6 @@
                 expandLandBtn.classList.remove('active-action');
             }
 
-            // 获取爆炸范围内的所有格子 (曼哈顿距离)
             function getCellsInRange(centerX, centerY, range) {
                 const cells = [];
                 for(let dx = -range; dx <= range; dx++) {
@@ -1537,7 +1781,6 @@
             }
 
             function attackCell(x,y) {
-                // 检查是否已攻击过
                 if(gameState.attackUsedThisTurn) {
                     statusText.textContent = `❌ 本回合已经攻击过了，请等待下一回合`;
                     gameState.selectedAction = null;
@@ -1558,17 +1801,14 @@
                 const attackerUnit = gameState.units.get(attackerUnitKey);
                 const attackerType = attackerUnit.type;
                 
-                // 检查是否为范围武器
                 const range = weaponRange[attackerType];
                 let capitalLost = false;
                 let eliminatedPlayer = null;
                 
                 if(range !== undefined) {
-                    // 范围攻击：获取范围内的所有格子
                     const [ax, ay] = attackerUnitKey.split(',').map(Number);
                     const targets = getCellsInRange(ax, ay, range);
                     
-                    // 移除攻击者自身
                     gameState.units.delete(attackerUnitKey);
                     const attackerCell = document.querySelector(`[data-x="${ax}"][data-y="${ay}"]`);
                     attackerCell.classList.remove('unit');
@@ -1580,20 +1820,16 @@
                         const posKey = `${pos.x},${pos.y}`;
                         const targetCell = document.querySelector(`[data-x="${pos.x}"][data-y="${pos.y}"]`);
                         
-                        // 清除该格子的单位
                         if(gameState.units.has(posKey)) {
                             gameState.units.delete(posKey);
                             targetCell.classList.remove('unit');
                             destroyedCount++;
                         }
                         
-                        // 改变领土归属 (除了攻击者自己的领土)
                         if(!gameState.playerLands[gameState.currentTurn].cells.has(posKey)) {
-                            // 找到原拥有者并移除
                             for(let i=1; i<=gameState.totalPlayers; i++) {
                                 if(gameState.eliminatedPlayers.has(i)) continue;
                                 if(i !== gameState.currentTurn && gameState.playerLands[i].cells.has(posKey)) {
-                                    // 检查是否是首都
                                     if(gameState.playerLands[i].capital && 
                                        gameState.playerLands[i].capital.x === pos.x && 
                                        gameState.playerLands[i].capital.y === pos.y) {
@@ -1606,7 +1842,6 @@
                                     break;
                                 }
                             }
-                            // 归攻击者所有
                             gameState.playerLands[gameState.currentTurn].cells.add(posKey);
                             targetCell.classList.add(`player${gameState.currentTurn}-land`);
                             capturedCount++;
@@ -1616,7 +1851,6 @@
                     statusText.textContent = `范围攻击！消灭 ${destroyedCount} 个单位，占领 ${capturedCount} 个格子`;
                     
                 } else {
-                    // 原单格攻击逻辑
                     const defenderUnit = gameState.units.get(targetKey);
                     if(defenderUnit) {
                         if(defenderUnit.owner === gameState.currentTurn) { statusText.textContent = `❌ 不能攻击自己的单位`; return; }
@@ -1636,7 +1870,6 @@
                             if(gameState.playerLands[i].cells.has(targetKey)) { oldOwner = i; break; }
                         }
                         if(oldOwner) {
-                            // 检查是否是首都
                             if(gameState.playerLands[oldOwner].capital && 
                                gameState.playerLands[oldOwner].capital.x === x && 
                                gameState.playerLands[oldOwner].capital.y === y) {
@@ -1661,17 +1894,15 @@
                     }
                 }
                 
-                // 标记本回合已攻击
                 gameState.attackUsedThisTurn = true;
                 gameState.selectedAction = null;
                 attackBtn.classList.remove('active-action');
                 
-                // 处理首都陷落
                 if(capitalLost && eliminatedPlayer !== null && !gameState.eliminatedPlayers.has(eliminatedPlayer)) {
                     eliminatePlayer(eliminatedPlayer);
                 }
                 
-                updateTurnIndicator(); // 更新攻击按钮状态
+                updateTurnIndicator();
             }
 
             function deployWeaponToCell(x, y) {
@@ -1690,14 +1921,12 @@
                 const weaponType = gameState.pendingWeapon;
                 const player = gameState.currentTurn;
                 
-                // 检查该玩家是否研发了这种武器
                 if(!gameState.researched[weaponType] || !gameState.researched[weaponType].has(player)) {
                     statusText.textContent = `❌ 你还没有研发这种武器`;
                     gameState.pendingWeapon = null;
                     return;
                 }
                 
-                // 检查是否已经使用过该武器 (每个玩家每种武器只能部署一次)
                 const usageKey = `${player}_${weaponType}`;
                 if(gameState.weaponUsed.has(usageKey)) {
                     statusText.textContent = `❌ 这种武器你已经使用过了，每个武器只能部署一次`;
@@ -1705,7 +1934,6 @@
                     return;
                 }
                 
-                // 检查地形限制
                 const cell = document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
                 const requiredTerrain = weaponTerrain[weaponType] || 'land';
                 if(requiredTerrain === 'land' && !cell.classList.contains('land')) {
@@ -1719,16 +1947,23 @@
                     return;
                 }
                 
-                // 部署武器
                 gameState.units.set(key, {type: weaponType, owner: player});
-                gameState.weaponUsed.set(usageKey, true); // 标记已使用
+                gameState.weaponUsed.set(usageKey, true);
                 cell.classList.add('unit');
                 
                 const weaponNames = {
-                    'tank': '坦克', '30w': '30万士兵', 'ship': '运输船',
-                    'cruiser': '巡洋舰', 'carrier': '航空母舰',
-                    'missileShort': '短程导弹', 'missileMedium': '中程导弹', 'missileLong': '洲际导弹',
-                    'nuke': '原子弹', 'hbomb': '氢弹'
+                    'lightTank': '轻型坦克', 'heavyTank': '主战坦克', 'artillery': '自行火炮',
+                    'aaMissile': '防空导弹车', 'ifv': '步兵战车', 'rocket': '火箭炮', 'empTank': '电磁坦克',
+                    'propFighter': '螺旋桨战机', 'jetFighter': '喷气式战斗机', 'fighterBomber': '战斗轰炸机',
+                    'bomber': '战略轰炸机', 'stealthBomber': '隐形轰炸机', 'drone': '无人机', 'awacs': '预警机',
+                    'vtol': '垂直起降战机', 'patrolBoat': '巡逻艇', 'missileBoat': '导弹快艇', 'destroyer': '驱逐舰',
+                    'frigate': '护卫舰', 'submarine': '潜艇', 'nukeSub': '核潜艇', 'amphibious': '两栖攻击舰',
+                    'battleship': '战列舰', 'missileShort': '短程导弹', 'missileMedium': '中程导弹',
+                    'missileLong': '洲际导弹', 'hypersonic': '高超音速导弹', 'nukeInfra': '核基础设施',
+                    'nuke': '原子弹', 'hbomb': '氢弹', 'neutronBomb': '中子弹', 'cobaltBomb': '钴弹',
+                    'railgun': '电磁炮', 'laser': '激光武器', 'particle': '粒子炮', 'rodFromGod': '天基动能武器',
+                    'orbital': '轨道炮', 'nano': '纳米机器人', 'radar': '雷达站', 'jammer': '干扰器',
+                    'medic': '医疗兵', 'spy': '间谍'
                 };
                 statusText.textContent = `部署 ${weaponNames[weaponType] || weaponType} 到 (${x}, ${y}) (已使用)`;
                 gameState.pendingWeapon = null;
@@ -1744,18 +1979,49 @@
                 }
                 const weaponList = [];
                 
-                // 检查每个武器类型，只显示玩家已研发且未使用的
                 const weaponTypes = [
-                    {type: 'tank', name: '坦克 (陆地)'},
-                    {type: '30w', name: '30万士兵 (陆地)'},
-                    {type: 'ship', name: '运输船 (海洋)'},
-                    {type: 'cruiser', name: '巡洋舰 (海洋)'},
-                    {type: 'carrier', name: '航空母舰 (海洋)'},
+                    {type: 'lightTank', name: '轻型坦克 (陆地)'},
+                    {type: 'heavyTank', name: '主战坦克 (陆地)'},
+                    {type: 'artillery', name: '自行火炮 (陆地)'},
+                    {type: 'aaMissile', name: '防空导弹车 (陆地)'},
+                    {type: 'ifv', name: '步兵战车 (陆地)'},
+                    {type: 'rocket', name: '火箭炮 (陆地/范围1)'},
+                    {type: 'empTank', name: '电磁坦克 (陆地)'},
+                    {type: 'propFighter', name: '螺旋桨战机 (空中)'},
+                    {type: 'jetFighter', name: '喷气式战斗机 (空中)'},
+                    {type: 'fighterBomber', name: '战斗轰炸机 (空中)'},
+                    {type: 'bomber', name: '战略轰炸机 (空中/范围2)'},
+                    {type: 'stealthBomber', name: '隐形轰炸机 (空中/范围2)'},
+                    {type: 'drone', name: '无人机 (空中)'},
+                    {type: 'awacs', name: '预警机 (空中)'},
+                    {type: 'vtol', name: '垂直起降战机 (空中)'},
+                    {type: 'patrolBoat', name: '巡逻艇 (海洋)'},
+                    {type: 'missileBoat', name: '导弹快艇 (海洋)'},
+                    {type: 'destroyer', name: '驱逐舰 (海洋)'},
+                    {type: 'frigate', name: '护卫舰 (海洋)'},
+                    {type: 'submarine', name: '潜艇 (海洋)'},
+                    {type: 'nukeSub', name: '核潜艇 (海洋/范围2)'},
+                    {type: 'amphibious', name: '两栖攻击舰 (海洋)'},
+                    {type: 'battleship', name: '战列舰 (海洋)'},
                     {type: 'missileShort', name: '短程导弹 (范围1)'},
                     {type: 'missileMedium', name: '中程导弹 (范围2)'},
                     {type: 'missileLong', name: '洲际导弹 (范围3)'},
+                    {type: 'hypersonic', name: '高超音速导弹 (范围3)'},
+                    {type: 'nukeInfra', name: '核基础设施 (陆地)'},
                     {type: 'nuke', name: '原子弹 (范围2)'},
-                    {type: 'hbomb', name: '氢弹 (范围3)'}
+                    {type: 'hbomb', name: '氢弹 (范围3)'},
+                    {type: 'neutronBomb', name: '中子弹 (范围2)'},
+                    {type: 'cobaltBomb', name: '钴弹 (范围3)'},
+                    {type: 'railgun', name: '电磁炮 (范围2)'},
+                    {type: 'laser', name: '激光武器'},
+                    {type: 'particle', name: '粒子炮 (范围2)'},
+                    {type: 'rodFromGod', name: '天基动能武器 (范围3)'},
+                    {type: 'orbital', name: '轨道炮 (范围3)'},
+                    {type: 'nano', name: '纳米机器人'},
+                    {type: 'radar', name: '雷达站 (陆地)'},
+                    {type: 'jammer', name: '干扰器'},
+                    {type: 'medic', name: '医疗兵 (陆地)'},
+                    {type: 'spy', name: '间谍'}
                 ];
                 
                 weaponTypes.forEach(w => {
@@ -1768,7 +2034,7 @@
                 });
                 
                 if(weaponList.length === 0) {
-                    alert('你没有可用的武器。请先研发新武器，或已部署的武器不能重复使用。');
+                    alert('你没有可用的武器。请先研发新武器。');
                     return;
                 }
                 
@@ -1800,7 +2066,6 @@
             function endTurn() {
                 if(gameState.setupPhase.isSetting) return;
                 
-                // 跳过已淘汰的玩家
                 let nextPlayer = gameState.currentTurn % gameState.totalPlayers + 1;
                 while(gameState.eliminatedPlayers.has(nextPlayer) && nextPlayer !== gameState.currentTurn) {
                     nextPlayer = nextPlayer % gameState.totalPlayers + 1;
@@ -1811,7 +2076,7 @@
                 gameState.selectedCell = null; 
                 gameState.selectedAction = null;
                 gameState.pendingWeapon = null;
-                gameState.attackUsedThisTurn = false; // 重置攻击次数
+                gameState.attackUsedThisTurn = false;
                 document.querySelectorAll('.grid-cell').forEach(c=>c.classList.remove('selected'));
                 placeUnitBtn.classList.remove('active-action');
                 moveUnitBtn.classList.remove('active-action');
@@ -1822,7 +2087,6 @@
                 renderPlayerCards();
                 statusText.textContent = `轮到 ${gameState.playerNames[gameState.currentTurn]}`;
                 
-                // 检查游戏是否结束
                 checkGameOver();
             }
 
@@ -1837,10 +2101,15 @@
                     }
                     const tech = this.dataset.tech;
                     
+                    // 前置条件检查
                     if (tech === 'missileMedium' && !gameState.researched.missileShort.has(player)) { alert('需要先研发短程导弹'); return; }
                     if (tech === 'missileLong' && !gameState.researched.missileMedium.has(player)) { alert('需要先研发中程导弹'); return; }
+                    if (tech === 'hypersonic' && !gameState.researched.missileLong.has(player)) { alert('需要先研发洲际导弹'); return; }
                     if (tech === 'nuke' && !gameState.researched.nukeInfra.has(player)) { alert('需要先研发核基础设施'); return; }
                     if (tech === 'hbomb' && !gameState.researched.nuke.has(player)) { alert('需要先研发原子弹'); return; }
+                    if (tech === 'neutronBomb' && !gameState.researched.nuke.has(player)) { alert('需要先研发原子弹'); return; }
+                    if (tech === 'cobaltBomb' && !gameState.researched.hbomb.has(player)) { alert('需要先研发氢弹'); return; }
+                    if (tech === 'nukeSub' && !gameState.researched.submarine.has(player)) { alert('需要先研发潜艇'); return; }
                     
                     let costSilver = parseInt(this.dataset.costSilver) || 0;
                     let costGold = parseInt(this.dataset.costGold) || 0;
@@ -1866,7 +2135,6 @@
                     gameState.playerResources[player].diamond -= costDiamond;
                     gameState.playerResources[player].uranium = (gameState.playerResources[player].uranium || 0) - costUranium;
 
-                    // 记录该玩家研发了此技术
                     if(!gameState.researched[tech]) gameState.researched[tech] = new Set();
                     gameState.researched[tech].add(player);
                     
@@ -1876,7 +2144,6 @@
                 });
             });
 
-            // 其他事件绑定
             confirmTerrainBtn.addEventListener('click', confirmSetup);
             endTurnBtn.addEventListener('click', endTurn);
             decreasePlayerBtn.addEventListener('click', ()=>{
@@ -1908,7 +2175,6 @@
                 } 
             });
 
-            // 初始化
             initPlayerData(2);
             generateGrid();
             updateTurnIndicator();
