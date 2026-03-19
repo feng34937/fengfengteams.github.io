@@ -25,34 +25,38 @@
                             '50%': { transform: 'translateY(-8px)' },
                         },
                         fadeUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         },
-                        glow: {
-                            '0%, 100%': { boxShadow: '0 0 15px rgba(139,0,0,0.2)' },
-                            '50%': { boxShadow: '0 0 30px rgba(139,0,0,0.4)' },
-                        },
-                        gradientShift: {
-                            '0%, 100%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
                         },
                         scaleIn: {
-                            '0%': { transform: 'scale(0.95)', opacity: '0' },
-                            '100%': { transform: 'scale(1)', opacity: '1' }
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        slideInLeft: {
+                            '0%': { transform: 'translateX(-30px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
                         },
                         slideInRight: {
                             '0%': { transform: 'translateX(30px)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                            '100%': { transform: 'translateX(0)', opacity: '1' },
+                        },
+                        pulse: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' },
                         }
                     },
                     animation: {
                         float: 'float 5s ease-in-out infinite',
                         fadeUp: 'fadeUp 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
-                        glow: 'glow 3s ease-in-out infinite',
-                        'spin-slow': 'spin 8s linear infinite',
-                        'gradient': 'gradientShift 6s ease infinite',
-                        'scale-in': 'scaleIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
-                        'slide-in-right': 'slideInRight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards'
+                        fadeIn: 'fadeIn 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+                        scaleIn: 'scaleIn 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+                        slideInLeft: 'slideInLeft 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+                        slideInRight: 'slideInRight 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+                        pulse: 'pulse 2s ease-in-out infinite',
                     }
                 }
             }
@@ -72,7 +76,7 @@
             backdrop-filter: blur(12px) saturate(180%) !important;
             -webkit-backdrop-filter: blur(12px) saturate(180%) !important;
             border-bottom: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             z-index: 100000 !important;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             padding: 12px 0;
@@ -88,12 +92,12 @@
         
         .navbar-scrolled {
             background: rgba(255, 255, 255, 0.95) !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
         }
         
         .dark .navbar-scrolled {
             background: rgba(17, 24, 39, 0.95) !important;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
         }
         
         /* 为固定导航栏留出空间 - 确保与标题栏完美接壤 */
@@ -120,6 +124,13 @@
             border-top: 1px solid rgba(0,0,0,0.05);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             z-index: 99999;
+            transform-origin: top;
+            animation: slideDown 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: scaleY(0.8); }
+            to { opacity: 1; transform: scaleY(1); }
         }
         
         .dark #mobileMenu {
@@ -204,13 +215,13 @@
             overflow: hidden;
             border-radius: 4px;
             box-shadow: 0 25px 40px -15px rgba(0,0,0,0.25);
-            transition: box-shadow 0.4s ease;
+            transition: box-shadow 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
         .carousel-container:hover {
-            box-shadow: 0 30px 50px -15px rgba(139,0,0,0.3);
+            box-shadow: 0 35px 60px -15px rgba(139,0,0,0.35);
         }
         .dark .carousel-container:hover {
-            box-shadow: 0 30px 50px -15px rgba(248, 113, 113, 0.3);
+            box-shadow: 0 35px 60px -15px rgba(248, 113, 113, 0.35);
         }
         .carousel-track {
             display: flex;
@@ -225,7 +236,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
         .dark .carousel-card { background: #2d2f31; }
 
@@ -241,13 +252,13 @@
             font-size: 1.4rem; color: #8B0000;
             cursor: pointer; z-index: 20;
             box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             opacity: 0.9;
         }
         .carousel-arrow:hover {
             background: #8B0000; color: white;
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 8px 20px rgba(139,0,0,0.4);
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 10px 25px rgba(139,0,0,0.4);
             opacity: 1;
         }
         .carousel-arrow.left { left: 12px; }
@@ -258,18 +269,20 @@
             width: 10px; height: 10px;
             background-color: #aaa;
             border-radius: 4px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             cursor: pointer;
         }
         .carousel-dot.active {
             width: 28px;
             background-color: #8B0000 !important;
+            transform: scale(1.1);
         }
         .dark .carousel-dot.active {
             background-color: #f87171 !important;
         }
         .carousel-dot:hover {
             background-color: #8B0000;
+            transform: scale(1.2);
         }
         .dark .carousel-dot:hover {
             background-color: #f87171;
@@ -277,38 +290,25 @@
 
         /* ===== 卡片悬浮 - 所有卡片统一 ===== */
         .card-hover {
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
             will-change: transform, box-shadow;
         }
         .card-hover:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 30px 40px -15px rgba(139,0,0,0.25);
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 35px 50px -15px rgba(139,0,0,0.3);
         }
 
-        /* 时间线 - 适应多行文本 */
+        /* 时间线 - 适应多行文本，优化动画 */
         .timeline-item {
             position: relative;
             padding-left: 2rem;
             border-left: 2px solid #8B0000;
             margin-bottom: 1.5rem;
-            animation: slideInLine 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-            opacity: 0;
-            transform: translateX(-10px);
+            opacity: 1 !important; /* 强制显示 */
+            transform: translateX(0) !important; /* 强制显示 */
             line-height: 1.6;
+            transition: all 0.3s ease;
         }
-        @keyframes slideInLine {
-            to { opacity: 1; transform: translateX(0); }
-        }
-        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
-        .timeline-item:nth-child(2) { animation-delay: 0.15s; }
-        .timeline-item:nth-child(3) { animation-delay: 0.2s; }
-        .timeline-item:nth-child(4) { animation-delay: 0.25s; }
-        .timeline-item:nth-child(5) { animation-delay: 0.3s; }
-        .timeline-item:nth-child(6) { animation-delay: 0.35s; }
-        .timeline-item:nth-child(7) { animation-delay: 0.4s; }
-        .timeline-item:nth-child(8) { animation-delay: 0.45s; }
-        .timeline-item:nth-child(9) { animation-delay: 0.5s; }
-        .timeline-item:nth-child(10) { animation-delay: 0.55s; }
         
         .timeline-item::before {
             content: '';
@@ -319,14 +319,14 @@
             transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
         .timeline-item:hover::before {
-            transform: scale(1.3);
-            box-shadow: 0 0 10px #8B0000;
+            transform: scale(1.4);
+            box-shadow: 0 0 15px #8B0000;
         }
         .dark .timeline-item:hover::before {
-            box-shadow: 0 0 10px #f87171;
+            box-shadow: 0 0 15px #f87171;
         }
 
-        /* 头像样式 */
+        /* 头像样式 - 优化动画 */
         .team-avatar-wrapper {
             width: 128px;
             height: 128px;
@@ -335,16 +335,16 @@
             background: linear-gradient(135deg, #8B0000 0%, #b30000 100%);
             padding: 4px;
             box-shadow: 0 10px 20px -5px rgba(139, 0, 0, 0.4);
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
-            animation: glow 3s ease-in-out infinite;
+            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+            animation: pulse 3s ease-in-out infinite;
         }
         .dark .team-avatar-wrapper {
             background: linear-gradient(135deg, #f87171 0%, #fca5a5 100%);
             box-shadow: 0 10px 20px -5px #f87171;
         }
         .card-hover:hover .team-avatar-wrapper {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 20px 30px -5px rgba(139, 0, 0, 0.7);
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 25px 35px -5px rgba(139, 0, 0, 0.7);
             animation: none;
         }
         .team-avatar {
@@ -370,17 +370,30 @@
             color: white;
             padding: 0.75rem 2rem;
             border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             box-shadow: 0 4px 6px rgba(139,0,0,0.2);
             display: inline-block;
             position: relative;
             overflow: hidden;
             cursor: pointer;
         }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-primary:hover::before {
+            left: 100%;
+        }
         .btn-primary:hover {
             background-color: #6b0000;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 12px rgba(139,0,0,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(139,0,0,0.3);
         }
         .dark .btn-primary {
             background-color: #f87171;
@@ -396,16 +409,29 @@
             color: #8B0000;
             padding: 0.75rem 2rem;
             border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             display: inline-block;
             position: relative;
             overflow: hidden;
             cursor: pointer;
         }
+        .btn-outline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139,0,0,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-outline:hover::before {
+            left: 100%;
+        }
         .btn-outline:hover {
             background-color: rgba(139,0,0,0.05);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 12px rgba(139,0,0,0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(139,0,0,0.2);
         }
         
         .btn-partition {
@@ -413,17 +439,90 @@
             color: #8B0000;
             padding: 0.75rem 2rem;
             border-radius: 4px;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             background: transparent;
             font-weight: 500;
             position: relative;
             overflow: hidden;
             cursor: pointer;
         }
+        .btn-partition::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139,0,0,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn-partition:hover::before {
+            left: 100%;
+        }
         .btn-partition:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 12px rgba(139,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(139,0,0,0.25);
             background-color: rgba(139,0,0,0.05);
+        }
+
+        /* 更多按钮样式 */
+        .btn-more {
+            background: transparent;
+            border: 2px solid #8B0000;
+            color: #8B0000;
+            padding: 0.75rem 3rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .btn-more::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139,0,0,0.15), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .btn-more:hover::before {
+            left: 100%;
+        }
+        
+        .btn-more:hover {
+            background-color: #8B0000;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(139,0,0,0.3);
+            gap: 15px;
+        }
+        
+        .btn-more i {
+            transition: transform 0.4s ease;
+        }
+        
+        .btn-more:hover i {
+            transform: translateX(8px);
+        }
+        
+        .dark .btn-more {
+            border-color: #f87171;
+            color: #f87171;
+        }
+        
+        .dark .btn-more:hover {
+            background-color: #f87171;
+            color: #1a1c1e;
         }
 
         /* ===== 鼠标靠近变色效果 - 优化版 ===== */
@@ -444,7 +543,7 @@
                 transparent 70%
             );
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             pointer-events: none;
             z-index: 2;
             border-radius: inherit;
@@ -485,7 +584,7 @@
                 transparent 70%
             );
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             pointer-events: none;
             z-index: 1;
             border-radius: 0;
@@ -520,7 +619,7 @@
             z-index: 50000;
             overflow-y: auto;
             transform: translateX(100%);
-            transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
             box-shadow: none;
             padding-top: 74px;
         }
@@ -545,8 +644,8 @@
             z-index: 40000;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(2px);
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(3px);
         }
         
         .page-overlay.active {
@@ -566,7 +665,7 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             margin-right: 15px;
         }
         
@@ -578,7 +677,8 @@
         .nav-back-button:hover {
             background: #8B0000;
             color: white;
-            transform: scale(1.05);
+            transform: scale(1.08) translateX(-3px);
+            box-shadow: 0 8px 15px rgba(139,0,0,0.2);
         }
         .dark .nav-back-button:hover {
             background: #f87171;
@@ -590,12 +690,6 @@
             padding: 40px 20px;
             max-width: 1000px;
             margin: 0 auto;
-            animation: contentFadeIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) 0.1s both;
-        }
-        
-        @keyframes contentFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
         
         .section-title {
@@ -604,7 +698,6 @@
             color: #8B0000;
             margin-bottom: 20px;
             text-align: center;
-            animation: slideInRight 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) 0.2s both;
         }
         
         .dark .section-title { color: #f87171; }
@@ -621,7 +714,7 @@
             color: #f87171;
         }
         
-        /* 分区卡片网格 */
+        /* 分区卡片网格 - 确保所有卡片可见 */
         .demo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -634,16 +727,12 @@
             border-radius: 4px;
             padding: 35px 25px;
             text-align: center;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
             border: 1px solid rgba(139, 0, 0, 0.1);
-            animation: scaleIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-            opacity: 0;
+            opacity: 1 !important; /* 强制显示 */
+            transform: scale(1) !important; /* 强制显示 */
             box-shadow: none !important;
         }
-        
-        .demo-card:nth-child(1) { animation-delay: 0.1s; }
-        .demo-card:nth-child(2) { animation-delay: 0.2s; }
-        .demo-card:nth-child(3) { animation-delay: 0.3s; }
         
         .dark .demo-card {
             background: #2d2f31;
@@ -652,22 +741,22 @@
         }
         
         .demo-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: none !important;
+            transform: translateY(-10px) scale(1.03) !important;
+            box-shadow: 0 25px 35px rgba(139,0,0,0.15) !important;
         }
         .dark .demo-card:hover {
-            box-shadow: none !important;
+            box-shadow: 0 25px 35px rgba(248, 113, 113, 0.15) !important;
         }
         
         .demo-icon {
             font-size: 3.5rem;
             color: #8B0000;
             margin-bottom: 15px;
-            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
         }
         
         .demo-card:hover .demo-icon {
-            transform: scale(1.15) rotate(5deg);
+            transform: scale(1.2) rotate(8deg);
         }
         
         .dark .demo-icon { color: #f87171; }
@@ -704,7 +793,7 @@
             font-size: 4rem;
             color: #8B0000;
             margin-bottom: 20px;
-            animation: float 3s ease-in-out infinite;
+            animation: float 4s ease-in-out infinite;
         }
         
         .dark .developing-icon {
@@ -714,13 +803,13 @@
         /* 页脚链接样式 - 使其看起来像可点击的按钮 */
         .footer-link {
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
             position: relative;
             display: inline-block;
         }
         .footer-link:hover {
             color: #8B0000 !important;
-            transform: translateX(5px);
+            transform: translateX(8px);
         }
         
         .dark .footer-link:hover {
@@ -738,7 +827,7 @@
             position: relative;
             isolation: isolate;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
         
         .thanks-section::before {
@@ -752,7 +841,7 @@
                 transparent 80%
             );
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             pointer-events: none;
             z-index: 1;
             border-radius: inherit;
@@ -769,6 +858,15 @@
         
         .thanks-section:hover::before {
             opacity: 1;
+        }
+        
+        .thanks-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px rgba(139,0,0,0.1);
+        }
+        
+        .dark .thanks-section:hover {
+            box-shadow: 0 20px 30px rgba(248,113,113,0.1);
         }
         
         .thanks-section > * {
@@ -801,7 +899,7 @@
             flex-direction: column;
             align-items: center;
             gap: 10px;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             cursor: pointer;
             padding: 15px 25px;
             border-radius: 8px;
@@ -810,19 +908,19 @@
         }
         
         .thanks-item:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
         }
         
         .thanks-icon {
             font-size: 3.5rem;
             color: #8B0000;
-            transition: transform 0.3s ease;
+            transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
             position: relative;
             z-index: 3;
         }
         
         .thanks-item:hover .thanks-icon {
-            transform: scale(1.1);
+            transform: scale(1.15) rotate(5deg);
         }
         
         .dark .thanks-icon {
@@ -858,28 +956,24 @@
             padding-right: 1.25rem;
         }
         
-        /* 动画 */
-        .animate-fadeUp {
-            animation: fadeUp 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+        /* 动画延迟类 */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        
+        /* 确保所有卡片内容可见 */
+        .bg-white, .bg-secondary, .bg-dark {
+            position: relative;
+            z-index: 1;
         }
         
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .animate-float {
-            animation: float 5s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 15px rgba(139,0,0,0.2); }
-            50% { box-shadow: 0 0 30px rgba(139,0,0,0.4); }
+        /* 确保团队成员卡片显示 */
+        .grid > div {
+            opacity: 1 !important;
+            transform: none !important;
+            animation: none !important;
         }
     </style>
 </head>
@@ -958,7 +1052,7 @@
         <!-- 关于我们 -->
         <section id="about" class="py-24 md:py-32">
             <div class="container mx-auto px-5 md:px-10">
-                <h2 class="text-4xl md:text-5xl font-bold text-center mb-20 animate-fadeUp">关于凤峰团队</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-20">关于凤峰团队</h2>
 
                 <!-- 轮播 - 自动轮播，卡片只有靠近效果 -->
                 <div class="max-w-5xl mx-auto mb-32">
@@ -968,7 +1062,7 @@
                         <p class="text-gray-500 dark:text-gray-400 mt-2">自动轮播展示团队最新动态</p>
                     </div>
 
-                    <div class="carousel-container animate-scale-in">
+                    <div class="carousel-container">
                         <button class="carousel-arrow left" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
                         <button class="carousel-arrow right" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
                         <div class="carousel-track" id="carouselTrack">
@@ -1018,7 +1112,7 @@
                     </div>
                 </div>
 
-                <!-- 历史年表 - 更新为10条内容 -->
+                <!-- 历史年表 - 更新为10条内容，添加更多按钮 -->
                 <div class="max-w-6xl mx-auto">
                     <h3 class="text-3xl md:text-4xl font-bold text-center mb-16">📆 里程碑 · 我们的故事</h3>
                     <div class="grid md:grid-cols-2 gap-x-12 gap-y-4 bg-secondary p-8 md:p-12 rounded-md shadow-md">
@@ -1037,6 +1131,13 @@
                             <div class="timeline-item"><span class="font-mono text-primary font-bold mr-3">10.</span>2026年3月11日，凤峰团队第三次代表大会于桂林市第一中学召开；此次会议中，元老院所有人均参加，另外两位预览体验成员（孙语宸、蒋筳瀚）亦于兹参加，大会确定了凤峰团队主要制作实用工具和游戏，并决定将孙语宸、蒋筳瀚升级为正式职员，将凤峰团队代表大会名称更为凤峰团队元老大会或凤峰团队全体大会，还决定发布凤峰团队官网及现代战争推演系列并持续更新。本次大会确定了凤峰团队未来的工作方向，对凤峰团队具有重要意义。</div>
                         </div>
                     </div>
+                    
+                    <!-- 更多按钮 - 点击跳转到指定链接 -->
+                    <div class="text-center mt-12">
+                        <a href="https://www.kdocs.cn/l/coqzdkzo7y8z" target="_blank" class="btn-more">
+                            更多故事 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1045,38 +1146,38 @@
         <section id="team" class="py-24 md:py-32 bg-secondary">
             <div class="container mx-auto px-5 md:px-10">
                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">核心团队</h2>
-                <p class="text-xl text-center max-w-2xl mx-auto mb-16 opacity-80">五名元老，各司其职，共同驱动团队创新</p>
+                <p class="text-xl text-center max-w-2xl mx-auto mb-16">五名元老，各司其职，共同驱动团队创新</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-7">
                     <!-- 凤峰 -->
-                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.1s;" onmousemove="updateMaskPosition(event)">
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="team-avatar-wrapper"><div class="team-avatar">凤</div></div>
                         <h3 class="text-2xl font-bold">凤峰</h3>
                         <p class="text-primary font-medium mb-3">团长 / 产品架构师</p>
                         <p class="text-sm text-gray-600 dark:text-gray-300">团队创始人，负责整体产品方向与核心设计。</p>
                     </div>
                     <!-- 麦承钊 -->
-                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.2s;" onmousemove="updateMaskPosition(event)">
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="team-avatar-wrapper"><div class="team-avatar">麦</div></div>
                         <h3 class="text-2xl font-bold">麦承钊</h3>
                         <p class="text-primary font-medium mb-3">副团长 / 技术总监</p>
                         <p class="text-sm text-gray-600 dark:text-gray-300">技术架构与服务器，保障产品稳定运行。</p>
                     </div>
                     <!-- 刘霆泳 -->
-                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.3s;" onmousemove="updateMaskPosition(event)">
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="team-avatar-wrapper"><div class="team-avatar">刘</div></div>
                         <h3 class="text-2xl font-bold">刘霆泳</h3>
                         <p class="text-primary font-medium mb-3">前端 / UI设计</p>
                         <p class="text-sm text-gray-600 dark:text-gray-300">界面与交互体验，打造友好视觉。</p>
                     </div>
                     <!-- 申颂凯 -->
-                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.4s;" onmousemove="updateMaskPosition(event)">
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="team-avatar-wrapper"><div class="team-avatar">申</div></div>
                         <h3 class="text-2xl font-bold">申颂凯</h3>
                         <p class="text-primary font-medium mb-3">后端 / 算法</p>
                         <p class="text-sm text-gray-600 dark:text-gray-300">算法优化与后端逻辑，提升系统效率。</p>
                     </div>
                     <!-- 陈思齐 -->
-                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card animate-scale-in" style="animation-delay: 0.5s;" onmousemove="updateMaskPosition(event)">
+                    <div class="bg-white p-6 rounded-md shadow-lg card-hover text-center hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="team-avatar-wrapper"><div class="team-avatar">陈</div></div>
                         <h3 class="text-2xl font-bold">陈思齐</h3>
                         <p class="text-primary font-medium mb-3">测试 / 质量保障</p>
@@ -1086,27 +1187,23 @@
             </div>
         </section>
 
-        <!-- 联系我们 + 特别鸣谢 -->
+        <!-- 联系我们 + 特别鸣谢 - 已删除工作时间卡片 -->
         <section id="contact" class="py-24 md:py-32">
             <div class="container mx-auto px-5 md:px-10">
                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">保持联系</h2>
                 <p class="text-xl text-center max-w-2xl mx-auto mb-16">任何想法、合作或疑问，欢迎随时找到我们</p>
-                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 bg-secondary p-8 md:p-10 rounded-md shadow-md">
-                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.1s;" onmousemove="updateMaskPosition(event)">
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 bg-secondary p-8 md:p-10 rounded-md shadow-md">
+                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-map-marker-alt text-primary text-2xl"></i></div>
                         <div><h4 class="font-bold text-lg">地址</h4><p class="text-gray-700 dark:text-gray-300">桂林市第一中学</p></div>
                     </div>
-                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.2s;" onmousemove="updateMaskPosition(event)">
+                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-phone text-primary text-2xl"></i></div>
                         <div><h4 class="font-bold text-lg">电话</h4><p class="text-gray-700 dark:text-gray-300">+86 152 0773 8425</p></div>
                     </div>
-                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.3s;" onmousemove="updateMaskPosition(event)">
+                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card" onmousemove="updateMaskPosition(event)">
                         <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-envelope text-primary text-2xl"></i></div>
                         <div><h4 class="font-bold text-lg">邮箱</h4><p class="text-gray-700 dark:text-gray-300">3493792731@qq.com</p></div>
-                    </div>
-                    <div class="flex items-start gap-4 group hover:translate-x-2 transition-transform duration-300 hover-tint-card animate-slide-in-right" style="animation-delay: 0.4s;" onmousemove="updateMaskPosition(event)">
-                        <div class="bg-primary/10 p-4 rounded-md group-hover:scale-110 transition-transform duration-300"><i class="fas fa-clock text-primary text-2xl"></i></div>
-                        <div><h4 class="font-bold text-lg">工作时间</h4><p class="text-gray-700 dark:text-gray-300">周一至五 9:00 - 18:00</p></div>
                     </div>
                 </div>
 
