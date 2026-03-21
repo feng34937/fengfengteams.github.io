@@ -152,7 +152,7 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* 教程提示框 - 修复显示层级和样式 */
+        /* 教程提示框 - 毛玻璃背景 */
         .tutorial-overlay {
             position: fixed;
             top: 0;
@@ -167,8 +167,9 @@
             padding-top: 30px;
         }
         .tutorial-bubble {
-            background: rgba(45,10,10,0.98);
-            border: 4px solid #ffb347;
+            background: rgba(45,10,10,0.8);
+            backdrop-filter: blur(8px);
+            border: 3px solid #ffb347;
             border-radius: 4px;
             padding: 25px 35px;
             max-width: 550px;
@@ -176,11 +177,10 @@
             color: #ffb3b3;
             font-size: 24px;
             text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 0 2px #8b1a1a;
-            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9);
             animation: bubblePop 0.4s ease;
             pointer-events: auto;
-            border-left: 10px solid #ffd966;
+            border-left: 8px solid #ffd966;
             position: relative;
             z-index: 50001;
         }
@@ -554,7 +554,7 @@
             display: flex;
             gap: 15px;
             background: rgba(45,10,10,0.8);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
             border: 2px solid #8b1a1a;
             border-radius: 4px;
             padding: 12px 18px;
@@ -897,7 +897,7 @@
         </div>
     </div>
 
-    <!-- 新手教程弹窗 (初始隐藏) -->
+    <!-- 新手教程弹窗 (毛玻璃背景) -->
     <div class="tutorial-overlay" id="tutorialOverlay" style="display: none;">
         <div class="tutorial-bubble" id="tutorialBubble">
             <div class="title" id="tutorialTitle">👋 欢迎新手！</div>
@@ -963,7 +963,7 @@
                 <button class="action-btn" id="endTurnBtn" disabled>结束回合</button>
             </div>
             <div class="status-text" id="statusText">请先完成大厅设置</div>
-            <div class="data-info">⚔️ 长按格子查看 | 首都陷落即灭国 | 每回合1次攻击 | 武器消耗品 | 50+种单位</div>
+            <div class="data-info">©凤峰团队 · 保留所有权利</div>
         </div>
     </div>
 
@@ -1374,7 +1374,6 @@
                 gameWrapper.style.display = 'block';
                 initPlayerData(2);
                 showTutorialStep(0);
-                // 自动弹出国家命名弹窗
                 setTimeout(() => {
                     showNameModal(1);
                 }, 500);
@@ -1520,7 +1519,7 @@
             function generateGrid() {
                 grid.innerHTML = '';
                 const map = generateBalancedMap();
-                window.uraniumResources = new Set(); // 简化
+                window.uraniumResources = new Set();
                 
                 for(let y=0; y<20; y++) {
                     for(let x=0; x<20; x++) {
@@ -1840,7 +1839,6 @@
                 checkTutorialProgress('expand');
             }
 
-            // 简化的攻击函数
             function attackCell(x,y) {
                 if(gameState.attackUsedThisTurn) {
                     statusText.textContent = `❌ 本回合已经攻击过了`;
@@ -1891,8 +1889,8 @@
                 checkTutorialProgress('deploy');
             }
 
-            function moveUnit(x,y) { /* 简化，教程不涉及 */ }
-            function showCellInfo(x,y) { /* 简化 */ }
+            function moveUnit(x,y) { }
+            function showCellInfo(x,y) { }
             function endTurn() { 
                 if(gameState.setupPhase.isSetting) return;
                 gameState.currentTurn = gameState.currentTurn % gameState.totalPlayers + 1;
@@ -1903,7 +1901,6 @@
                 checkTutorialProgress('endTurn');
             }
 
-            // 绑定事件
             placeUnitBtn.addEventListener('click', ()=>{ if(!gameState.setupPhase.isSetting) { gameState.selectedAction='place'; statusText.textContent = `请点击你的陆地格子部署步兵`; } });
             collectBtn.addEventListener('click', ()=>{ if(!gameState.setupPhase.isSetting) { gameState.selectedAction='collect'; statusText.textContent = `请点击你的领土格子收集资源`; } });
             expandLandBtn.addEventListener('click', ()=>{ if(!gameState.setupPhase.isSetting) { gameState.selectedAction='expand'; statusText.textContent = `请点击相邻格子扩张 (100银币)`; } });
@@ -1961,7 +1958,6 @@
                 showNameModal(1);
             });
 
-            // 初始化
             initPlayerData(2);
             generateGrid();
             updateTurnIndicator();
