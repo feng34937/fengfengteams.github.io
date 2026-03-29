@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>凤峰团队</title>
+    <title>凤峰团队 · 纪念版</title>
     <!-- Tailwind + Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -1035,9 +1035,126 @@
             transform: none !important;
             animation: none !important;
         }
+        
+        /* 解散公告弹窗样式 */
+        .dissolution-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 200000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .dissolution-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 450px;
+            width: 90%;
+            padding: 30px 25px;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            border-top: 5px solid #8B0000;
+        }
+        
+        .dark .modal-content {
+            background: #1f2937;
+            border-top-color: #f87171;
+        }
+        
+        .modal-content.active {
+            transform: scale(1);
+        }
+        
+        .modal-icon {
+            font-size: 4rem;
+            color: #8B0000;
+            margin-bottom: 20px;
+        }
+        
+        .dark .modal-icon {
+            color: #f87171;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #8B0000;
+        }
+        
+        .dark .modal-title {
+            color: #f87171;
+        }
+        
+        .modal-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4b5563;
+            margin-bottom: 25px;
+        }
+        
+        .dark .modal-text {
+            color: #9ca3af;
+        }
+        
+        .modal-btn {
+            background: #8B0000;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn:hover {
+            background: #6b0000;
+            transform: scale(1.05);
+        }
+        
+        .dark .modal-btn {
+            background: #f87171;
+            color: #1a1c1e;
+        }
+        
+        .dark .modal-btn:hover {
+            background: #fca5a5;
+        }
     </style>
 </head>
 <body class="font-inter text-dark antialiased">
+    <!-- 解散公告弹窗 -->
+    <div id="dissolutionModal" class="dissolution-modal">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <i class="fas fa-heart-broken"></i>
+            </div>
+            <div class="modal-title">重要通知</div>
+            <div class="modal-text">
+                凤峰团队已解散并停止更新，<br>5月1日将停止支持。<br><br>感谢大家一路以来的陪伴与支持！
+            </div>
+            <button class="modal-btn" onclick="closeModal()">铭记于心</button>
+        </div>
+    </div>
+
     <!-- 遮罩层 -->
     <div class="page-overlay" id="pageOverlay" onclick="closeAllSections()"></div>
 
@@ -1168,7 +1285,7 @@
                     </div>
                 </div>
 
-                <!-- 历史年表 - 已将申宋凯改为申颂凯 -->
+                <!-- 历史年表 -->
                 <div class="max-w-6xl mx-auto">
                     <h3 class="text-3xl md:text-4xl font-bold text-center mb-16">📆 里程碑 · 我们的故事</h3>
                     <div class="grid md:grid-cols-2 gap-x-12 gap-y-4 bg-secondary p-8 md:p-12 rounded-md shadow-md">
@@ -1196,7 +1313,7 @@
             </div>
         </section>
 
-        <!-- 核心团队 - 已将申宋凯改为申颂凯 -->
+        <!-- 核心团队 -->
         <section id="team" class="py-24 md:py-32 bg-secondary">
             <div class="container mx-auto px-5 md:px-10">
                 <h2 class="text-4xl md:text-5xl font-bold text-center mb-6">核心团队</h2>
@@ -1380,6 +1497,27 @@
     </div>
 
     <script>
+        // 页面加载时显示解散公告弹窗
+        window.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('dissolutionModal');
+            const modalContent = modal.querySelector('.modal-content');
+            setTimeout(() => {
+                modal.classList.add('active');
+                setTimeout(() => {
+                    modalContent.classList.add('active');
+                }, 50);
+            }, 300);
+        });
+        
+        function closeModal() {
+            const modal = document.getElementById('dissolutionModal');
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.classList.remove('active');
+            setTimeout(() => {
+                modal.classList.remove('active');
+            }, 300);
+        }
+        
         // 导航栏滚动效果
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
